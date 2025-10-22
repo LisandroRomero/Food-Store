@@ -1,24 +1,27 @@
+// ============================================
+// 📄 PÁGINA PRINCIPAL - Ejemplo de página protegida
+// ============================================
+
 import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import { protegerPagina, mostrarInfoUsuario, crearBotonCerrarSesion } from './utils/auth'
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+// 🛡️ Paso 1: Proteger esta página
+// Si no hay sesión, esta función redirige automáticamente al login
+const sesion = protegerPagina();
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+// 🎉 Si llegamos aquí, significa que el usuario SÍ está autenticado
+if (sesion) {
+  console.log('✅ Usuario autenticado:', sesion);
+  
+  // 📺 Paso 2: Mostrar el nombre del usuario
+  // Busca un elemento con id="userInfo" y le pone el nombre
+  mostrarInfoUsuario('userInfo');
+  
+  // 🔴 Paso 3: Crear un botón para cerrar sesión
+  // Busca un elemento con id="logoutContainer" y crea el botón ahí
+  crearBotonCerrarSesion('logoutContainer');
+  
+  console.log('💡 Puedes ver tu sesión escribiendo en la consola:');
+  console.log('   localStorage.getItem("sesion")');
+}
+

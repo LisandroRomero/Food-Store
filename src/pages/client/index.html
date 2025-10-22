@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Cliente</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: white;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .welcome-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .welcome-card h1 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-card p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h2 {
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .icon {
+            font-size: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>👤 Panel de Cliente</h1>
+            <div class="user-section">
+                <span id="userInfo"></span>
+                <div id="logoutContainer"></div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="welcome-card">
+            <h1>Bienvenido a tu Panel de Cliente</h1>
+            <p id="welcomeMessage">Aquí puedes gestionar tu perfil y servicios</p>
+            
+            <div class="nav-buttons">
+                <button class="btn" onclick="window.location.href='/'">
+                    🏠 Página Principal
+                </button>
+                <button class="btn" onclick="window.location.href='/src/pages/admin/index.html'">
+                    🛠️ Panel Admin
+                </button>
+            </div>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <h2>
+                    <span class="icon">📊</span>
+                    Mis Estadísticas
+                </h2>
+                <p>Visualiza tus métricas y estadísticas personales.</p>
+                <button class="btn">Ver Estadísticas</button>
+            </div>
+
+            <div class="card">
+                <h2>
+                    <span class="icon">⚙️</span>
+                    Configuración
+                </h2>
+                <p>Personaliza tu cuenta y preferencias.</p>
+                <button class="btn" id="settingsBtn">Configurar</button>
+            </div>
+
+            <div class="card">
+                <h2>
+                    <span class="icon">📧</span>
+                    Mensajes
+                </h2>
+                <p>Revisa tus mensajes y notificaciones.</p>
+                <button class="btn">Ver Mensajes</button>
+            </div>
+
+            <div class="card">
+                <h2>
+                    <span class="icon">💳</span>
+                    Servicios
+                </h2>
+                <p>Administra tus servicios contratados.</p>
+                <button class="btn">Gestionar</button>
+            </div>
+
+            <div class="card">
+                <h2>
+                    <span class="icon">📝</span>
+                    Documentos
+                </h2>
+                <p>Accede a tus documentos y archivos.</p>
+                <button class="btn">Ver Documentos</button>
+            </div>
+
+            <div class="card">
+                <h2>
+                    <span class="icon">❓</span>
+                    Ayuda
+                </h2>
+                <p>¿Necesitas ayuda? Consulta nuestras guías.</p>
+                <button class="btn">Obtener Ayuda</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./client.ts"></script>
+</body>
+</html>
