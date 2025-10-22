@@ -10,7 +10,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, './index.html'),
-        login: path.resolve(__dirname, './src/pages/auth/loguin/login.html'),
+        login: path.resolve(__dirname, './src/pages/auth/login/login.html'),
         admin: path.resolve(__dirname, './src/pages/admin/index.html'),
         client: path.resolve(__dirname, './src/pages/client/index.html'),
       },
