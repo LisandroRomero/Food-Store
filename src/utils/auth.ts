@@ -42,7 +42,7 @@ export function cerrarSesion(): void {
   localStorage.removeItem(SESION_KEY);
   
   // 2. Redirigir al login
-  window.location.href = '/src/pages/auth/loguin/login.html';
+  window.location.href = '/src/pages/auth/login/login.html';
 }
 
 // ============================================
@@ -56,7 +56,7 @@ export function protegerPagina(): any {
   
   // 2. Si NO hay sesión, redirigir al login
   if (!sesion) {
-    window.location.href = '/src/pages/auth/loguin/login.html';
+    window.location.href = '/src/pages/auth/login/login.html';
     return null;
   }
   
