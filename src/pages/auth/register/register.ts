@@ -2,68 +2,71 @@
 // 📚 REGISTRO: TypeScript + localStorage
 // ============================================
 
+import { register } from "../../../utils/api";
+
 // Usamos la misma interface del login
-interface Usuario {
-  email: string;
-  password: string;
-  nombre?: string;
-}
+// interface Usuario {
+//   nombre: string;
+//   apellido: string;
+//   email: string;
+//   password: string;
+// }
 
 // ============================================
 // 📦 Variables globales (mismas que en login)
 // ============================================
-const USUARIOS_KEY = 'usuarios';
-const SESION_KEY = 'sesion';
+// const USUARIOS_KEY = 'usuarios';
+// const SESION_KEY = 'sesion';
 
 // ============================================
 // 🔍 Función para verificar si un email ya existe
 // ============================================
-function emailExiste(email: string): boolean {
-  // 1. Obtener usuarios guardados
-  const usuariosTexto = localStorage.getItem(USUARIOS_KEY);
+// function emailExiste(email: string): boolean {
+//   // 1. Obtener usuarios guardados
+//   const usuariosTexto = localStorage.getItem(USUARIOS_KEY);
   
-  // 2. Si no hay usuarios, el email no existe
-  if (!usuariosTexto) {
-    return false;
-  }
+//   // 2. Si no hay usuarios, el email no existe
+//   if (!usuariosTexto) {
+//     return false;
+//   }
   
-  // 3. Convertir texto a array y buscar el email
-  const usuarios: Usuario[] = JSON.parse(usuariosTexto);
-  const usuarioExistente = usuarios.find(u => u.email === email);
+//   // 3. Convertir texto a array y buscar el email
+//   const usuarios: Usuario[] = JSON.parse(usuariosTexto);
+//   const usuarioExistente = usuarios.find(u => u.email === email);
   
-  // 4. Retornar true si existe, false si no
-  return usuarioExistente !== undefined;
-}
+//   // 4. Retornar true si existe, false si no
+//   return usuarioExistente !== undefined;
+// }
 
 // ============================================
 // ➕ Función para agregar un nuevo usuario
 // ============================================
-function agregarUsuario(nuevoUsuario: Usuario): boolean {
-  try {
-    // 1. Obtener usuarios actuales
-    const usuariosTexto = localStorage.getItem(USUARIOS_KEY);
-    let usuarios: Usuario[] = [];
+// function agregarUsuario(nuevoUsuario: Usuario): boolean {
+//   try {
+//     // 1. Obtener usuarios actuales
+//     const usuariosTexto = localStorage.getItem(USUARIOS_KEY);
+//     let usuarios: Usuario[] = [];
     
-    // 2. Si ya hay usuarios, cargarlos
-    if (usuariosTexto) {
-      usuarios = JSON.parse(usuariosTexto);
-    }
+//     // 2. Si ya hay usuarios, cargarlos
+//     if (usuariosTexto) {
+//       usuarios = JSON.parse(usuariosTexto);
+//     }
     
-    // 3. Agregar el nuevo usuario al array
-    usuarios.push(nuevoUsuario);
+//     // 3. Agregar el nuevo usuario al array
+//     usuarios.push(nuevoUsuario);
     
-    // 4. Guardar el array actualizado en localStorage
-    const nuevosUsuariosTexto = JSON.stringify(usuarios);
-    localStorage.setItem(USUARIOS_KEY, nuevosUsuariosTexto);
+//     // 4. Guardar el array actualizado en localStorage
+//     const nuevosUsuariosTexto = JSON.stringify(usuarios);
+//     localStorage.setItem(USUARIOS_KEY, nuevosUsuariosTexto);
     
-    console.log('✅ Nuevo usuario registrado:', nuevoUsuario);
-    return true;
+//     console.log('✅ Nuevo usuario registrado:', nuevoUsuario);
+//     return true;
     
-  } catch (error) {
-    console.error('❌ Error al registrar usuario:', error);
-    return false;
-  }
-}
+//   } catch (error) {
+//     console.error('❌ Error al registrar usuario:', error);
+//     return false;
+//   }
+// }
 
 // ============================================
 // ✅ Función para validar los datos del registro
@@ -109,54 +112,59 @@ function validarRegistro(
 // ============================================
 // 📝 Función para hacer REGISTRO
 // ============================================
-function hacerRegistro(
+async function hacerRegistro(
   nombre: string, 
+  apellido: string,
   email: string, 
   password: string, 
   confirmPassword: string,
   aceptaTerminos: boolean
-): boolean {
+): Promise<boolean> {
   
   // 1. Validar los datos
   const errorValidacion = validarRegistro(nombre, email, password, confirmPassword, aceptaTerminos);
   if (errorValidacion) {
-    console.log('❌ Error de validación:', errorValidacion);
+    mostrarMensaje('error', errorValidacion);
     return false;
   }
   
-  // 2. Verificar si el email ya existe
-  if (emailExiste(email)) {
-    console.log('❌ El email ya está registrado');
-    return false;
-  }
+  // 2. Separar nombre y apellido del campo único
+ 
   
-  // 3. Crear el nuevo usuario
-  const nuevoUsuario: Usuario = {
-    nombre: nombre.trim(),
-    email: email.trim(),
-    password: password // En una app real, esto debería estar encriptado
-  };
+  // 3. Llamar a la API
+  const resultado = await register(nombre, apellido, email, password);
   
-  // 4. Agregar el usuario
-  const registroExitoso = agregarUsuario(nuevoUsuario);
-  
-  if (registroExitoso) {
-    console.log('✅ Registro exitoso');
-    
-    // 5. Iniciar sesión automáticamente después del registro
-    const sesion = {
-      email: nuevoUsuario.email,
-      nombre: nuevoUsuario.nombre,
-      horaLogin: new Date().toISOString()
+  if (resultado.success) {
+    // 4. Si el backend fue exitoso, guardar TAMBIÉN en localStorage para el login
+    const usuarioParaLocalStorage = {
+      nombre: nombre.trim(),
+      apellido: apellido.trim(), 
+      email: email.trim(),
+      password: password // Para poder hacer login después
     };
     
-    const sesionTexto = JSON.stringify(sesion);
-    localStorage.setItem(SESION_KEY, sesionTexto);
+    // Obtener usuarios actuales del localStorage
+    const usuariosTexto = localStorage.getItem('usuarios');
+    let usuarios = [];
     
+    if (usuariosTexto) {
+      usuarios = JSON.parse(usuariosTexto);
+    }
+    
+    // Agregar el nuevo usuario
+    usuarios.push(usuarioParaLocalStorage);
+    
+    // Guardar la lista actualizada
+    localStorage.setItem('usuarios', JSON.stringify(usuarios));
+    
+    console.log('✅ Usuario guardado en backend Y localStorage');
+    
+    mostrarMensaje('exito', `¡Cuenta creada exitosamente! Bienvenido ${nombre}`);
     return true;
+  } else {
+    mostrarMensaje('error', resultado.message || 'Error al crear la cuenta');
+    return false;
   }
-  
-  return false;
 }
 
 // ============================================
@@ -166,6 +174,7 @@ function hacerRegistro(
 // 1️⃣ Obtener referencias a los elementos del HTML
 const formulario = document.getElementById('registerForm') as HTMLFormElement;
 const inputNombre = document.getElementById('nombre') as HTMLInputElement;
+const inputApellido = document.getElementById('apellido') as HTMLInputElement;
 const inputEmail = document.getElementById('email') as HTMLInputElement;
 const inputPassword = document.getElementById('password') as HTMLInputElement;
 const inputConfirmPassword = document.getElementById('confirmPassword') as HTMLInputElement;
@@ -205,24 +214,22 @@ inputConfirmPassword.addEventListener('input', () => {
 });
 
 // 4️⃣ Manejar el envío del formulario
-formulario.addEventListener('submit', (evento: Event) => {
+formulario.addEventListener('submit', async (evento: Event) => {
   // Prevenir que el formulario recargue la página
   evento.preventDefault();
   
   // Obtener los valores ingresados por el usuario
   const nombre = inputNombre.value.trim();
+  const apellido = inputApellido.value.trim();
   const email = inputEmail.value.trim();
   const password = inputPassword.value;
   const confirmPassword = inputConfirmPassword.value;
   const aceptaTerminos = inputAceptaTerminos.checked;
   
   // Intentar hacer el registro
-  const registroExitoso = hacerRegistro(nombre, email, password, confirmPassword, aceptaTerminos);
+  const registroExitoso = await hacerRegistro(nombre, apellido, email, password, confirmPassword, aceptaTerminos);;
   
   if (registroExitoso) {
-    // Si el registro fue exitoso
-    mostrarMensaje('exito', `¡Cuenta creada exitosamente! Bienvenido ${nombre}`);
-    
     // Limpiar el formulario
     formulario.reset();
     
@@ -230,14 +237,8 @@ formulario.addEventListener('submit', (evento: Event) => {
     setTimeout(() => {
       window.location.href = '/';
     }, 2000);
-  } else {
-    // Si el registro falló
-    if (emailExiste(email)) {
-      mostrarMensaje('error', 'Este email ya está registrado');
-    } else {
-      mostrarMensaje('error', 'Error al crear la cuenta. Verifica los datos.');
-    }
   }
+  
 });
 
 // ============================================
