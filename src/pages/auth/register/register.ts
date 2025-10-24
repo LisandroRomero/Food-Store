@@ -51,7 +51,6 @@ function validarRegistro(
 
 document.addEventListener('DOMContentLoaded', () => {
   
-  // Si ya hay sesión, redirigir
   const sesion = obtenerSesion();
   if (sesion) {
     redirigirSegunRol();
@@ -68,8 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const mensajeError = document.getElementById('errorMessage') as HTMLDivElement;
   const mensajeExito = document.getElementById('successMessage') as HTMLDivElement;
 
-  // ✅ Función para mostrar mensajes (DENTRO del DOMContentLoaded)
+  // ✅ VALIDAR QUE EXISTAN ANTES DE CONTINUAR
+  if (!formulario) {
+    console.error('❌ No se encontró el formulario registerForm');
+    return;
+  }
+
   function mostrarMensaje(tipo: 'error' | 'exito', texto: string): void {
+    if (!mensajeError || !mensajeExito) return;
+    
     if (tipo === 'error') {
       mensajeError.textContent = texto;
       mensajeError.classList.add('show');
@@ -86,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 5000);
   }
 
-  // ✅ Función hacer registro 
   async function hacerRegistro(
     nombre: string, 
     apellido: string,
@@ -114,21 +119,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Validar contraseñas en tiempo real
-  inputConfirmPassword.addEventListener('input', () => {
-    const password = inputPassword.value;
-    const confirmPassword = inputConfirmPassword.value;
-    
-    if (confirmPassword && password !== confirmPassword) {
-      inputConfirmPassword.style.borderColor = '#c33';
-    } else {
-      inputConfirmPassword.style.borderColor = '#ddd';
-    }
-  });
+  if (inputConfirmPassword && inputPassword) {
+    inputConfirmPassword.addEventListener('input', () => {
+      const password = inputPassword.value;
+      const confirmPassword = inputConfirmPassword.value;
+      
+      if (confirmPassword && password !== confirmPassword) {
+        inputConfirmPassword.style.borderColor = '#c33';
+      } else {
+        inputConfirmPassword.style.borderColor = '#ddd';
+      }
+    });
+  }
 
-  // Manejar envío del formulario
   formulario.addEventListener('submit', async (evento: Event) => {
     evento.preventDefault();
+    console.log('🚀 Formulario enviado!');
+    
+    if (!inputNombre || !inputApellido || !inputEmail || 
+        !inputPassword || !inputConfirmPassword || !inputAceptaTerminos) {
+      console.error('❌ Faltan elementos:');
+      console.log('inputNombre:', inputNombre);
+      console.log('inputApellido:', inputApellido);
+      console.log('inputEmail:', inputEmail);
+      console.log('inputPassword:', inputPassword);
+      console.log('inputConfirmPassword:', inputConfirmPassword);
+      console.log('inputAceptaTerminos:', inputAceptaTerminos);
+      alert('Error: Formulario incompleto');
+      return;
+    }
     
     const nombre = inputNombre.value.trim();
     const apellido = inputApellido.value.trim();
