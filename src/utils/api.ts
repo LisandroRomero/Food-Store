@@ -8,56 +8,72 @@ export const login = async (email: string, password: string) => {
       body: JSON.stringify({ email, password })
     });
     
+   const responseData = await response.json();
+    
     if (!response.ok) {
-      return { success: false, message: 'Credenciales inválidas' };
+      console.error('Error al iniciar sesión:', responseData);
+      return { 
+        success: false, 
+        message: responseData.message || 'Credenciales inválidas' 
+      };
     }
     
-    const usuario = await response.json();
-    
     const sesion = {
-      id: usuario.id,
-      nombre: usuario.nombre,
-      apellido: usuario.apellido,
-      email: usuario.email,
-      rol: usuario.rol,
+      id: responseData.id,
+      nombre: responseData.nombre,
+      apellido: responseData.apellido,
+      email: responseData.email,
+      rol: responseData.rol,
     };
     
     localStorage.setItem('sesion', JSON.stringify(sesion));
+    return { success: true, data: responseData };
     
-    return { success: true, data: usuario };
   } catch (error) {
-    return { success: false, message: 'Error al conectar' };
+    console.error('Error al iniciar sesión:', error);
+    return { 
+      success: false, 
+      message: 'Error de conexión con el servidor' 
+    };
   }
 };
 
 export const register = async (nombre: string, apellido: string, email: string, password: string) => {
+  
   try {
     const response = await fetch(`${baseURL}/api/usuarios/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nombre, apellido, email, password, rol: 'USUARIO' })
     });
+
+    const responseData = await response.json();
     
     if (!response.ok) {
-      return { success: false, message: 'Error al registrar' };
+      console.error('Error al registrar:', responseData);
+      return { 
+        success: false, 
+        message: responseData.message || 'Error al registrar' 
+      };
     }
     
-    const usuario = await response.json();
-    
-    // session
     const sesion = {
-      id: usuario.id,
-      nombre: usuario.nombre,
-      apellido: usuario.apellido,
-      email: usuario.email,
-      rol: usuario.rol
+      id: responseData.id,
+      nombre: responseData.nombre,
+      apellido: responseData.apellido,
+      email: responseData.email,
+      rol: responseData.rol
     };
     
     localStorage.setItem('sesion', JSON.stringify(sesion));
+    return { success: true, data: responseData };
     
-    return { success: true, data: usuario };
   } catch (error) {
-    return { success: false, message: 'Error al registrar' };
+    console.error('Error al registrar:', error);
+    return { 
+      success: false, 
+      message: 'Error de conexión con el servidor' 
+    };
   }
 };
 

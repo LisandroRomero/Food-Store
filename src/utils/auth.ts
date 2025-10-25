@@ -118,8 +118,11 @@ export function redirigirSegunRol(): void {
 
     //En el futuro cambiar a adminHome
     //window.location.href = '/src/pages/admin/adminHome/adminHome.html';
+
   } else {
+
     window.location.href = '/src/pages/client/index.html';
+    
     //window.location.href = '/src/pages/store/home/home.html';
   }
 }
