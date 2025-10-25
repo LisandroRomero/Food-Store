@@ -19,9 +19,13 @@ export function obtenerSesion(): any {
   if (!sesionTexto) {
     return null;
   }
-  
-  // 3. Convertir el texto a objeto y retornarlo
-  return JSON.parse(sesionTexto);
+  try {
+    // 3. Intentar convertir el texto a objeto y retornarlo
+    return JSON.parse(sesionTexto);
+  } catch (error) {
+    console.error('Error al obtener la sesión:', error);
+    return null;
+  }
 }
 
 // ============================================
@@ -31,6 +35,10 @@ export function obtenerSesion(): any {
 export function haySesion(): boolean {
   const sesion = obtenerSesion();
   return sesion !== null;
+}
+
+export function guardarSesion(sesion: any): void {
+  localStorage.setItem(SESION_KEY, JSON.stringify(sesion));
 }
 
 // ============================================
@@ -45,12 +53,28 @@ export function cerrarSesion(): void {
   window.location.href = '/src/pages/auth/login/login.html';
 }
 
+export function esAdmin(): boolean {
+
+  const sesion = obtenerSesion();
+
+  return sesion && sesion.rol === 'ADMIN';
+}
+
+
+export function esUsuario(): boolean {
+
+  const sesion = obtenerSesion();
+
+  return sesion && sesion.rol === 'USUARIO';
+}
+
 // ============================================
 // 🛡️ Función 4: Proteger una página
 // ============================================
 // Si no hay sesión, redirige al login automáticamente
 // Úsala al inicio de cualquier página que quieras proteger
 export function protegerPagina(): any {
+  
   // 1. Verificar si hay sesión
   const sesion = obtenerSesion();
   
@@ -62,6 +86,45 @@ export function protegerPagina(): any {
   
   // 3. Si hay sesión, retornar los datos
   return sesion;
+}
+
+export function protegerPaginaAdmin(): any {
+  const sesion = protegerPagina(); // Primero verifica que haya sesión
+  if (!sesion) return null;
+  
+  if (sesion.rol !== 'ADMIN') {
+    alert('Acceso denegado');
+    redirigirSegunRol(); // Redirige al home del usuario
+    return null;
+  }
+  
+  return sesion;
+}
+
+// Redirigir según rol 
+export function redirigirSegunRol(): void {
+  const sesion = obtenerSesion();
+  
+  if (!sesion) {
+    //redirigir al pagina principal si no hay sesion
+    window.location.href = '/src/pages/auth/login/login.html';
+    return;
+  }
+  if (sesion.rol === 'ADMIN') {
+
+
+    //ahora que tenemos ejempl ode prueba vamos a redirigia aca
+    window.location.href = '/src/pages/admin/index.html';
+
+    //En el futuro cambiar a adminHome
+    //window.location.href = '/src/pages/admin/adminHome/adminHome.html';
+
+  } else {
+
+    window.location.href = '/src/pages/client/index.html';
+    
+    //window.location.href = '/src/pages/store/home/home.html';
+  }
 }
 
 // ============================================
@@ -77,7 +140,7 @@ export function mostrarInfoUsuario(idElemento: string): void {
   
   // 3. Si existen ambos, poner el texto
   if (elemento && sesion) {
-    elemento.textContent = `Bienvenido, ${sesion.nombre || sesion.email}`;
+    elemento.textContent = `Bienvenido, ${sesion.nombre} ${sesion.apellido}`;
   }
 }
 
@@ -131,4 +194,7 @@ if (sesion) {
   crearBotonCerrarSesion('logoutBtn');
 }
 */
+
+
+
 

@@ -1,20 +1,16 @@
-// ============================================
-// 📚 LOGIN: TypeScript + API
-// ============================================
 
-// Ya no necesitamos importar login de api.ts - usamos localStorage
+import { login } from "../../../utils/api";
+import { obtenerSesion, guardarSesion, redirigirSegunRol } from "../../../utils/auth";
 
 // ============================================
-// ✅ Función para validar los datos del login
+// ✅ Validar datos del login
 // ============================================
 function validarLogin(email: string, password: string): string | null {
-  // Validar email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     return 'Por favor ingresa un email válido';
   }
   
-  // Validar contraseña
   if (password.length < 1) {
     return 'Por favor ingresa tu contraseña';
   }
@@ -23,92 +19,60 @@ function validarLogin(email: string, password: string): string | null {
 }
 
 // ============================================
-// 🔍 Función para buscar un usuario en localStorage
+// 🔓 Hacer LOGIN con API
 // ============================================
-function buscarUsuario(email: string, password: string): any | null {
-  // 1. Obtener usuarios del localStorage
-  const usuariosTexto = localStorage.getItem('usuarios');
+async function hacerLogin(
+  email: string, 
+  password: string, 
+  mostrarMensaje: (tipo: 'error' | 'exito', texto: string) => void
+): Promise<boolean> {
   
-  // 2. Si no hay usuarios, retornar null
-  if (!usuariosTexto) {
-    return null;
-  }
-  
-  // 3. Convertir texto a array de objetos
-  const usuarios = JSON.parse(usuariosTexto);
-  
-  // 4. Buscar el usuario con email y contraseña coincidentes
-  const usuario = usuarios.find((u: any) => 
-    u.email === email && u.password === password
-  );
-  
-  return usuario || null;
-}
-
-// ============================================
-// 💾 Función para guardar la sesión
-// ============================================
-function guardarSesion(usuario: any): void {
-  const sesion = {
-    email: usuario.email,
-    nombre: usuario.nombre,
-    apellido: usuario.apellido,
-    horaLogin: new Date().toISOString()
-  };
-  
-  localStorage.setItem('sesion', JSON.stringify(sesion));
-  console.log('✅ Sesión guardada:', sesion);
-}
-
-// ============================================
-// 🔓 Función para hacer LOGIN
-// ============================================
-function hacerLogin(email: string, password: string, mostrarMensaje: (tipo: 'error' | 'exito', texto: string) => void): boolean {
-  // 1. Validar los datos
   const errorValidacion = validarLogin(email, password);
   if (errorValidacion) {
     mostrarMensaje('error', errorValidacion);
     return false;
   }
   
-  // 2. Buscar el usuario en localStorage
-  const usuario = buscarUsuario(email, password);
+  const resultado = await login(email, password);
   
-  if (!usuario) {
-    mostrarMensaje('error', 'Email o contraseña incorrectos');
+  if (resultado.success) {
+    guardarSesion(resultado.data);
+    mostrarMensaje('exito', `¡Bienvenido ${resultado.data.nombre}!`);
+    return true;
+  } else {
+    mostrarMensaje('error', resultado.message || 'Email o contraseña incorrectos');
     return false;
   }
-  
-  // 3. Si existe, guardar la sesión
-  guardarSesion(usuario);
-  mostrarMensaje('exito', `¡Bienvenido de vuelta ${usuario.nombre}!`);
-  return true;
 }
 
 // ============================================
 // 🎨 Conectar con el HTML
 // ============================================
 
-// Asegurar que el DOM esté completamente cargado
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('🔍 DOM cargado, conectando elementos...');
+  console.log('🔍 DOM cargado...');
   
-  // Obtener referencias a los elementos del HTML
+  // Si ya hay sesión activa, redirigir
+  const sesion = obtenerSesion();
+  if (sesion) {
+    console.log('✅ Sesión activa, redirigiendo...');
+    redirigirSegunRol();
+    return;
+  }
+  
   const formulario = document.getElementById('loginForm') as HTMLFormElement;
   const inputEmail = document.getElementById('email') as HTMLInputElement;
   const inputPassword = document.getElementById('password') as HTMLInputElement;
   const mensajeError = document.getElementById('errorMessage') as HTMLDivElement;
   const mensajeExito = document.getElementById('successMessage') as HTMLDivElement;
   
-  // Verificar que los elementos existan
   if (!formulario) {
-    console.error('❌ No se encontró el formulario loginForm');
+    console.error('❌ No se encontró el formulario');
     return;
   }
   
-  console.log('✅ Elementos encontrados, configurando event listeners...');
+  console.log('✅ Formulario encontrado');
 
-  // Función para mostrar mensajes
   function mostrarMensaje(tipo: 'error' | 'exito', texto: string): void {
     if (tipo === 'error') {
       mensajeError.textContent = texto;
@@ -126,24 +90,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 5000);
   }
 
-  // Manejar el envío del formulario
-  formulario.addEventListener('submit', (evento: Event) => {
+  formulario.addEventListener('submit', async (evento: Event) => {
     evento.preventDefault();
-    console.log('📝 Formulario enviado, procesando login...');
     
     const email = inputEmail.value.trim();
     const password = inputPassword.value;
     
-    const loginExitoso = hacerLogin(email, password, mostrarMensaje);
+    const loginExitoso = await hacerLogin(email, password, mostrarMensaje);
     
     if (loginExitoso) {
       formulario.reset();
       
       setTimeout(() => {
-        window.location.href = '/';
-      }, 2000);
+        redirigirSegunRol();
+      }, 1500);
     }
   });
   
-  console.log('🔐 Sistema de Login - API Mode - ¡Listo!');
+  console.log('🔐 Sistema de Login - ¡Listo!');
 });

@@ -1,83 +1,105 @@
 const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
-export const register = async (nombre: string, apellido: string, email: string, password: string) => {
-  try {
-    const response = await fetch(`${baseURL}/usuarios`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ nombre, apellido, rol: 'USUARIO', mail: email, password }),
-    });
-    
-    if (!response.ok) {
-      throw new Error('Error al registrar usuario');
-    }
-    
-    return { success: true, data: await response.json() };
-  } catch (error) {
-    console.error('Error al registrar:', error);
-    return { success: false, message: 'Error al registrar usuario' };
-  }
-};
-
-export const getUsuarios = async () => {
-  try {
-    const response = await fetch(`${baseURL}/usuarios`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    
-    if (!response.ok) {
-      throw new Error('Error al obtener usuarios');
-    }
-    
-    const usuarios = await response.json();
-    return { success: true, data: usuarios };
-  } catch (error) {
-    console.error('Error al obtener usuarios:', error);
-    return { success: false, message: 'Error al conectar con el servidor' };
-  }
-};
-
 export const login = async (email: string, password: string) => {
   try {
-    // 1. Obtener usuarios del backend
-    const resultado = await getUsuarios();
+    const response = await fetch(`${baseURL}/api/usuarios/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
     
-    if (!resultado.success) {
-      return { success: false, message: 'Error al conectar con el servidor' };
+   const responseData = await response.json();
+    
+    if (!response.ok) {
+      console.error('Error al iniciar sesión:', responseData);
+      return { 
+        success: false, 
+        message: responseData.message || 'Credenciales inválidas' 
+      };
     }
     
-    // 2. Buscar el usuario con email y password coincidentes
-    const usuarios = resultado.data;
-    const usuarioEncontrado = usuarios.find((user: any) => 
-      user.mail === email && user.password === password
-    );
-    
-    if (!usuarioEncontrado) {
-      return { success: false, message: 'Email o contraseña incorrectos' };
-    }
-    
-    // 3. Guardar sesión en localStorage
     const sesion = {
-      id: usuarioEncontrado.id,
-      email: usuarioEncontrado.mail,
-      nombre: usuarioEncontrado.nombre,
-      apellido: usuarioEncontrado.apellido,
-      rol: usuarioEncontrado.rol,
-      horaLogin: new Date().toISOString()
+      id: responseData.id,
+      nombre: responseData.nombre,
+      apellido: responseData.apellido,
+      email: responseData.email,
+      rol: responseData.rol,
     };
     
     localStorage.setItem('sesion', JSON.stringify(sesion));
+    return { success: true, data: responseData };
     
-    return { success: true, data: usuarioEncontrado };
   } catch (error) {
-    console.error('Error al hacer login:', error);
-    return { success: false, message: 'Error al hacer login' };
+    console.error('Error al iniciar sesión:', error);
+    return { 
+      success: false, 
+      message: 'Error de conexión con el servidor' 
+    };
   }
 };
 
+export const register = async (nombre: string, apellido: string, email: string, password: string) => {
+  
+  try {
+    const response = await fetch(`${baseURL}/api/usuarios/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, apellido, email, password, rol: 'USUARIO' })
+    });
 
+    const responseData = await response.json();
+    
+    if (!response.ok) {
+      console.error('Error al registrar:', responseData);
+      return { 
+        success: false, 
+        message: responseData.message || 'Error al registrar' 
+      };
+    }
+    
+    const sesion = {
+      id: responseData.id,
+      nombre: responseData.nombre,
+      apellido: responseData.apellido,
+      email: responseData.email,
+      rol: responseData.rol
+    };
+    
+    localStorage.setItem('sesion', JSON.stringify(sesion));
+    return { success: true, data: responseData };
+    
+  } catch (error) {
+    console.error('Error al registrar:', error);
+    return { 
+      success: false, 
+      message: 'Error de conexión con el servidor' 
+    };
+  }
+};
+
+// !! sin autenticación ¡¡
+export const getProductos = async () => {
+  try {
+    const response = await fetch(`${baseURL}/api/productos`);
+    if (!response.ok) throw new Error('Error');
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+// !! sin autenticación ¡¡
+export const crearPedido = async (pedidoData: any) => {
+  try {
+    const response = await fetch(`${baseURL}/api/pedidos`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(pedidoData)
+    });
+    
+    if (!response.ok) throw new Error('Error al crear pedido');
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
