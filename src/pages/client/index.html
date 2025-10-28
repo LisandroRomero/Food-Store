@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Cliente</title>
+    
+    <!-- Estilos globales (en orden) -->
+    <link rel="stylesheet" href="../../styles/variables.css">
+    <link rel="stylesheet" href="../../styles/global.css">
+    <link rel="stylesheet" href="../../styles/components.css">
+    
+    <!-- Estilos específicos de esta página -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -18,15 +25,15 @@
     </header>
 
     <div class="container">
-        <div class="welcome-card">
-            <h1>Bienvenido a tu Panel de Cliente</h1>
+        <div class="card welcome-card">
+            <h1 class="card-title">Bienvenido a tu Panel de Cliente</h1>
             <p id="welcomeMessage">Aquí puedes gestionar tu perfil y servicios</p>
             
             <div class="nav-buttons">
-                <button class="btn" onclick="window.location.href='/'">
+                <button class="btn btn-primary" onclick="window.location.href='/'">
                     🏠 Página Principal
                 </button>
-                <button class="btn" onclick="window.location.href='/src/pages/admin/index.html'">
+                <button class="btn btn-primary" onclick="window.location.href='/src/pages/admin/adminHome/adminHome.html'">
                     🛠️ Panel Admin
                 </button>
             </div>
@@ -34,57 +41,57 @@
 
         <div class="cards-grid">
             <div class="card">
-                <h2>
+                <h2 class="card-title">
                     <span class="icon">📊</span>
                     Mis Estadísticas
                 </h2>
                 <p>Visualiza tus métricas y estadísticas personales.</p>
-                <button class="btn">Ver Estadísticas</button>
+                <button class="btn btn-primary">Ver Estadísticas</button>
             </div>
 
             <div class="card">
-                <h2>
+                <h2 class="card-title">
                     <span class="icon">⚙️</span>
                     Configuración
                 </h2>
                 <p>Personaliza tu cuenta y preferencias.</p>
-                <button class="btn" id="settingsBtn">Configurar</button>
+                <button class="btn btn-primary" id="settingsBtn">Configurar</button>
             </div>
 
             <div class="card">
-                <h2>
+                <h2 class="card-title">
                     <span class="icon">📧</span>
                     Mensajes
                 </h2>
                 <p>Revisa tus mensajes y notificaciones.</p>
-                <button class="btn">Ver Mensajes</button>
+                <button class="btn btn-primary">Ver Mensajes</button>
             </div>
 
             <div class="card">
-                <h2>
+                <h2 class="card-title">
                     <span class="icon">💳</span>
                     Servicios
                 </h2>
                 <p>Administra tus servicios contratados.</p>
-                <button class="btn">Gestionar</button>
+                <button class="btn btn-primary">Gestionar</button>
             </div>
 
             <div class="card">
-                <h2>
+                <h2 class="card-title">
                     <span class="icon">📝</span>
                     Documentos
                 </h2>
                 <p>Accede a tus documentos y archivos.</p>
-                <button class="btn">Ver Documentos</button>
+                <button class="btn btn-primary">Ver Documentos</button>
             </div>
 
             <div class="card">
-                <h2>
+                <h2 class="card-title">
                     <span class="icon">❓</span>
                     Ayuda
                 </h2>
                 <p>¿Necesitas ayuda? Consulta nuestras guías.</p>
-                <button class="btn">Obtener Ayuda</button>
+                <button class="btn btn-primary">Obtener Ayuda</button>
             </div>
         </div>
     </div>

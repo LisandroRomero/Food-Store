@@ -1,100 +1,124 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* ============================================
+   ESTILOS ESPECÍFICOS - Panel de Cliente
+   Solo estilos únicos de esta página
+   ============================================ */
+
+/* =========================
+   PERSONALIZACIÓN PARA CLIENTE
+   ========================= */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
-    min-height: 100vh;
+  /* Gradiente específico para el panel de cliente */
+  background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+  min-height: 100vh;
 }
+
+/* Header específico del cliente - fondo blanco */
 .header {
-    background: white;
-    padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: var(--color-white);
+  color: var(--color-gray-900);
+  box-shadow: var(--shadow);
 }
-.header-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+
+.header h1 {
+  color: var(--color-gray-900);
 }
+
 .user-section {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
 }
-.container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-}
+
+/* =========================
+   WELCOME CARD - Específico del cliente
+   ========================= */
 .welcome-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
-    text-align: center;
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
 }
-.welcome-card h1 {
-    color: #333;
-    margin-bottom: 1rem;
+
+.welcome-card .card-title {
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--spacing-md);
 }
+
 .welcome-card p {
-    color: #666;
-    font-size: 1.1rem;
+  font-size: var(--font-size-lg);
+  color: var(--color-gray-600);
+  margin-bottom: var(--spacing-lg);
 }
-.cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-.card {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-}
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-.card h2 {
-    color: #333;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-.card p {
-    color: #666;
-    line-height: 1.6;
-}
-.icon {
-    font-size: 2rem;
-}
-.btn {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-top: 1rem;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-.btn:hover {
-    transform: translateY(-2px);
-}
+
 .nav-buttons {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-top: 1rem;
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: var(--spacing-lg);
+}
+
+/* =========================
+   CARDS GRID - Layout específico
+   ========================= */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+/* Personalización de cards para cliente */
+.cards-grid .card {
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.cards-grid .card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Icono grande en las cards */
+.icon {
+  font-size: var(--font-size-3xl);
+  margin-right: var(--spacing-sm);
+}
+
+/* Estilo específico para los títulos con iconos */
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* =========================
+   BOTONES PERSONALIZADOS PARA CLIENTE
+   ========================= */
+.btn-primary {
+  /* Sobrescribir con el gradiente del cliente */
+  background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #66a6ff 0%, #89f7fe 100%);
+  transform: translateY(-2px);
+}
+
+/* =========================
+   RESPONSIVE - Ajustes específicos
+   ========================= */
+@media (max-width: 768px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .nav-buttons {
+    flex-direction: column;
+  }
+  
+  .nav-buttons .btn {
+    width: 100%;
+  }
+  
+  .welcome-card .card-title {
+    font-size: var(--font-size-2xl);
+  }
 }

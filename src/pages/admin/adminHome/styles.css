@@ -1,0 +1,93 @@
+/* ============================================
+   ESTILOS ESPECÍFICOS - Admin Home
+   Solo estilos únicos de esta página
+   ============================================ */
+
+/* Personalización del header para admin */
+.header {
+    /* Sobrescribir el gradiente genérico con uno específico para admin */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+/* Dashboard Grid - Específico de admin */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Los estilos de .card ya están en components.css
+   Solo agregamos personalizaciones si son necesarias */
+
+/* Estadísticas - Específico de admin */
+.stat-number {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-secondary);
+    margin: var(--spacing-sm) 0;
+}
+
+/* Sobrescribir color para estado operativo */
+.stat-number.status-ok {
+    color: var(--color-success);
+}
+
+.stat-label {
+    color: var(--color-gray-600);
+    font-size: var(--font-size-sm);
+    margin-top: var(--spacing-sm);
+}
+
+/* Acciones rápidas - Layout específico */
+.actions {
+    display: flex;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+/* Los estilos de botones ya están en components.css */
+
+/* Actividad reciente - usa la clase .card de components.css */
+
+.activity-item {
+    padding: var(--spacing-md);
+    border-bottom: var(--border-width) solid var(--color-gray-200);
+    transition: background-color var(--transition-fast);
+}
+
+.activity-item:hover {
+    background-color: var(--color-gray-100);
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-time {
+    color: var(--color-gray-500);
+    font-size: var(--font-size-sm);
+    margin-top: var(--spacing-xs);
+}
+
+/* Responsive - Ajustes específicos */
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .actions {
+        flex-direction: column;
+    }
+    
+    .actions .btn {
+        width: 100%;
+    }
+}

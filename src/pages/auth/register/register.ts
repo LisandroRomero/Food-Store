@@ -17,12 +17,11 @@ function validarRegistro(
   aceptaTerminos: boolean
 ): string | null {
   
-  if (!nombre || nombre.trim().length < 2) {
-    return 'El nombre debe tener al menos 2 caracteres';
+  if (!nombre || nombre.trim().length < 3) {
+    return 'El nombre debe tener al menos 3 caracteres';
   }
-  
-  if (!apellido || apellido.trim().length < 2) {
-    return 'El apellido debe tener al menos 2 caracteres';
+  if (!apellido || apellido.trim().length < 3) {
+    return 'El apellido debe tener al menos 3 caracteres';
   }
   
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
