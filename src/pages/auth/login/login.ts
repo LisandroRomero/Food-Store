@@ -11,7 +11,7 @@ function validarLogin(email: string, password: string): string | null {
     return 'Por favor ingresa un email válido';
   }
   
-  if (password.length < 1) {
+  if (password.length < 5) {
     return 'Por favor ingresa tu contraseña';
   }
   

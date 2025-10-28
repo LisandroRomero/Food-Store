@@ -1,0 +1,132 @@
+/* ============================================
+   VARIABLES GLOBALES - Food Store
+   Define todos los valores reutilizables aquí
+   ============================================ */
+
+:root {
+  /* =========================
+     COLORES PRINCIPALES
+     ========================= */
+  /* Colores de marca */
+  --color-primary: #ff5f41;
+  --color-primary-hover: #f87058;
+  --color-primary-dark: #e54d35;
+  
+  --color-secondary: #667eea;
+  --color-secondary-hover: #5a67d8;
+  
+  /* Colores de UI */
+  --color-success: #28a745;
+  --color-danger: #dc3545;
+  --color-warning: #ffc107;
+  --color-info: #17a2b8;
+  
+  /* Escala de grises */
+  --color-black: #000000;
+  --color-gray-900: #212529;
+  --color-gray-800: #343a40;
+  --color-gray-700: #495057;
+  --color-gray-600: #6c757d;
+  --color-gray-500: #adb5bd;
+  --color-gray-400: #ced4da;
+  --color-gray-300: #dee2e6;
+  --color-gray-200: #e9ecef;
+  --color-gray-100: #f8f9fa;
+  --color-white: #ffffff;
+  
+  /* Colores de fondo */
+  --bg-body: #f5f5f5;
+  --bg-card: #ffffff;
+  --bg-dark: #242424;
+  
+  /* =========================
+     TIPOGRAFÍA
+     ========================= */
+  --font-family-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-family-heading: var(--font-family-base);
+  --font-family-mono: 'Consolas', 'Monaco', monospace;
+  
+  /* Tamaños de fuente */
+  --font-size-xs: 0.75rem;     /* 12px */
+  --font-size-sm: 0.875rem;    /* 14px */
+  --font-size-base: 1rem;      /* 16px */
+  --font-size-lg: 1.125rem;    /* 18px */
+  --font-size-xl: 1.25rem;     /* 20px */
+  --font-size-2xl: 1.5rem;     /* 24px */
+  --font-size-3xl: 2rem;       /* 32px */
+  --font-size-4xl: 2.5rem;     /* 40px */
+  
+  /* Pesos de fuente */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Altura de línea */
+  --line-height-tight: 1.25;
+  --line-height-base: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* =========================
+     ESPACIADO
+     ========================= */
+  --spacing-xs: 0.25rem;    /* 4px */
+  --spacing-sm: 0.5rem;     /* 8px */
+  --spacing-md: 1rem;       /* 16px */
+  --spacing-lg: 1.5rem;     /* 24px */
+  --spacing-xl: 2rem;       /* 32px */
+  --spacing-2xl: 3rem;      /* 48px */
+  --spacing-3xl: 4rem;      /* 64px */
+  
+  /* =========================
+     BORDES
+     ========================= */
+  --border-radius-sm: 0.25rem;    /* 4px */
+  --border-radius: 0.5rem;        /* 8px */
+  --border-radius-lg: 0.75rem;    /* 12px */
+  --border-radius-xl: 1rem;       /* 16px */
+  --border-radius-full: 9999px;
+  
+  --border-width: 1px;
+  --border-width-2: 2px;
+  --border-color: var(--color-gray-300);
+  
+  /* =========================
+     SOMBRAS
+     ========================= */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25);
+  
+  /* =========================
+     TRANSICIONES
+     ========================= */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 250ms ease-in-out;
+  --transition-slow: 350ms ease-in-out;
+  
+  /* =========================
+     Z-INDEX
+     ========================= */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  
+  /* =========================
+     BREAKPOINTS (para JS)
+     ========================= */
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-2xl: 1400px;
+}

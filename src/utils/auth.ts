@@ -114,16 +114,18 @@ export function redirigirSegunRol(): void {
 
 
     //ahora que tenemos ejempl ode prueba vamos a redirigia aca
-    window.location.href = '/src/pages/admin/index.html';
+    window.location.href = '/src/pages/admin/adminHome/adminHome.html';
 
-    //En el futuro cambiar a adminHome
-    //window.location.href = '/src/pages/admin/adminHome/adminHome.html';
+  
 
-  } else {
+  } else if (sesion.rol === 'USUARIO') {
 
     window.location.href = '/src/pages/client/index.html';
     
     //window.location.href = '/src/pages/store/home/home.html';
+  }else {
+    // Si el rol no es reconocido, cerrar sesión por seguridad
+    window.location.href = '/src/pages/auth/login/login.html';
   }
 }
 
