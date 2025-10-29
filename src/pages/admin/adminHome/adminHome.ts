@@ -110,3 +110,85 @@ function mostrarHoraLogin(): void {
 }
 
 console.log('🛠️ Panel de administración cargado');
+
+// ============================================
+// ⏰ Side Bar
+// ============================================
+
+// Define la estructura de tu proyecto para mapear el data-page a la URL del archivo
+// Rutas relativas desde 'pages/admin/adminHome' a las carpetas hermanas en 'pages/admin'
+const pageMap: { [key: string]: string } = {
+    adminHome: 'adminHome.html', 
+    categories: '../categories/categories.html', 
+    products: '../products/products.html',       
+    orders: '../orders/orders.html',
+};
+
+const contentArea = document.getElementById('main-content-wrapper') as HTMLElement | null;
+const sidebarNav = document.querySelector('.sidebar-nav') as HTMLElement | null;
+
+
+async function loadContent(pageKey: string): Promise<void> {
+    if (!contentArea) return;
+
+    if (pageKey === 'adminHome') {
+        // Recargar la página para volver al estado inicial del Dashboard
+        location.reload(); 
+        return;
+    }
+
+    const url = pageMap[pageKey];
+    if (!url) {
+        contentArea.innerHTML = `<h1>Error</h1><p>No se encontró la página para la clave: ${pageKey}</p>`;
+        return;
+    }
+
+    try {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: No se pudo cargar el archivo desde: ${url}`);
+        }
+
+        const html = await response.text();
+
+        // EXTRAER SOLO EL CONTENIDO DENTRO DEL BODY
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const newContent = doc.querySelector('body')?.innerHTML;
+        
+        if (newContent) {
+            contentArea.innerHTML = newContent;
+        } else {
+            // Fallback
+            contentArea.innerHTML = html;
+        }
+
+    } catch (error) {
+        console.error('Fallo la carga del contenido:', error);
+        contentArea.innerHTML = `<h1>Error de Carga</h1><p>No se pudo cargar el contenido de ${pageKey}.</p>`;
+    }
+}
+
+
+function handleSidebarClick(event: MouseEvent): void {
+    const target = event.target as HTMLAnchorElement;
+    
+    if (target.tagName === 'A' && target.hasAttribute('data-page')) {
+        event.preventDefault(); 
+        const pageKey = target.getAttribute('data-page');
+
+        if (pageKey) {
+            loadContent(pageKey);
+
+            // Actualiza la clase 'active' para resaltar el enlace actual
+            const currentActive = document.querySelector('.sidebar-nav a.active');
+            if (currentActive) {
+                currentActive.classList.remove('active');
+            }
+            target.classList.add('active');
+        }
+    }
+}
+
+sidebarNav?.addEventListener('click', handleSidebarClick);
