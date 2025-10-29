@@ -76,6 +76,53 @@
     margin-top: var(--spacing-xs);
 }
 
+.content-area {
+    display: flex; /* Contenedor principal para Sidebar y Contenido */
+    min-height: 100vh
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    /* background-color: #dfdfdf; */
+    box-shadow: var(--shadow);
+    color: #000;
+    padding: 20px 0;
+    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0; /* Evita que la sidebar se encoja */
+}
+
+.sidebar-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li a {
+    display: block;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: #000;
+    transition: background-color 0.3s;
+}
+
+.sidebar-nav li a:hover,
+.sidebar-nav li a.active {
+    background-color: #d8d8d8;
+    border-left: 5px solid #667eea;
+}
+
+/* Área de Contenido Principal que será reemplazada */
+.main-content-wrapper {
+    flex-grow: 1; /* Ocupa el espacio restante */
+    padding: 20px;
+}
+
 /* Responsive - Ajustes específicos */
 @media (max-width: 768px) {
     .dashboard-grid {
