@@ -77,6 +77,61 @@ export const register = async (nombre: string, apellido: string, email: string, 
   }
 };
 
+
+
+export const getUsers = async () => {
+  try {
+    const response = await fetch(`${baseURL}/api/usuarios`);
+    if (!response.ok) throw new Error('Error al obtener usuarios');
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+export const getUserById = async (id: string) => {
+  try {
+    const response = await fetch(`${baseURL}/api/usuarios/${id}`);
+    if (!response.ok) throw new Error('Error al obtener usuario');
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+export const deleteUser = async (id: string) => {
+  try {
+      const response = await fetch(`${baseURL}/api/usuarios/${id}`, {
+      method: 'DELETE'
+    });
+    if (!response.ok) throw new Error('Error al eliminar usuario');
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const updateUser = async (id: string, userData: any) => {
+  try {
+    const response = await fetch(`${baseURL}/api/usuarios/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData)
+    });
+    if (!response.ok) throw new Error('Error al actualizar usuario');
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+
+
+
 // !! sin autenticación ¡¡
 export const getProductos = async () => {
   try {
@@ -87,6 +142,99 @@ export const getProductos = async () => {
     throw error;
   }
 };
+
+export const crearProducto = async (productoData: any) => {
+  try {
+    const response = await fetch(`${baseURL}/api/productos`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(productoData)
+    });
+    if (!response.ok) throw new Error('Error al crear producto');
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const actualizarProducto = async (id: string, productoData: any) => {
+  try {
+    const response = await fetch(`${baseURL}/api/productos/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(productoData)
+    });
+    if (!response.ok) throw new Error('Error al actualizar producto');
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const eliminarProducto = async (id: string) => {
+  try {
+    const response = await fetch(`${baseURL}/api/productos/${id}`, {
+      method: 'DELETE'
+    });
+    if (!response.ok) throw new Error('Error al eliminar producto');
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};  
+
+
+export const getCategorias = async () => {
+  try {
+    const response = await fetch(`${baseURL}/api/categorias`);
+    if (!response.ok) throw new Error('Error al obtener categorias');
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+export const crearCategoria = async (categoriaData: any) => {
+  try {
+    const response = await fetch(`${baseURL}/api/categorias`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(categoriaData)
+    });
+    if (!response.ok) throw new Error('Error al crear categoria');
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+export const actualizarCategoria = async (id: string, categoriaData: any) => {
+  try {
+    const response = await fetch(`${baseURL}/api/categorias/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(categoriaData)
+    });
+    if (!response.ok) throw new Error('Error al actualizar categoria');
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const eliminarCategoria = async (id: string) => {
+  try {
+    const response = await fetch(`${baseURL}/api/categorias/${id}`, {
+      method: 'DELETE'
+    });
+    if (!response.ok) throw new Error('Error al eliminar categoria');
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+
 
 // !! sin autenticación ¡¡
 export const crearPedido = async (pedidoData: any) => {
@@ -103,3 +251,5 @@ export const crearPedido = async (pedidoData: any) => {
     throw error;
   }
 };
+
+
