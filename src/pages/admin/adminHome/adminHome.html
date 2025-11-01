@@ -15,11 +15,25 @@
     
 </head>
 <body>
+    <!-- HEADER MODERNO -->
     <header class="header">
         <div class="header-content">
-            <h1>🛠️ Panel de Administración</h1>
+            <div class="header-left">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div class="header-title">
+                    <h1>Panel de Administración</h1>
+                    <span class="header-subtitle">Food Store Admin</span>
+                </div>
+            </div>
             <div class="user-section">
-                <span id="userInfo"></span>
+                <div class="user-info">
+                    <span class="user-icon">👤</span>
+                    <span id="userInfo" class="user-name"></span>
+                </div>
                 <div id="logoutContainer"></div>
             </div>
         </div>
@@ -27,16 +41,57 @@
 
     <div class="content-area">
 
+        <!-- SIDEBAR MODERNO -->
         <aside id="sidebar" class="sidebar">
             <div class="sidebar-header">
-                <h3>Admin Panel</h3>
+                <div class="logo">
+                    <span class="logo-icon">🍕</span>
+                    <span class="logo-text">Food Store</span>
+                </div>
             </div>
             <nav class="sidebar-nav">
-                <ul>
-                    <li><a href="#" data-page="adminHome" class="active">Dashboard</a></li>
-                    <li><a href="#" data-page="categories">Categorías</a></li>
-                    <li><a href="#" data-page="products">Productos</a></li>
-                    <li><a href="#" data-page="orders">Pedidos</a></li>
+                <div class="nav-section">
+                    <span class="nav-section-title">MENÚ PRINCIPAL</span>
+                </div>
+                <ul class="nav-menu">
+                    <li>
+                        <a href="#" data-page="adminHome" class="nav-item active">
+                            <span class="nav-icon">📊</span>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-page="categories" class="nav-item">
+                            <span class="nav-icon">📁</span>
+                            <span class="nav-text">Categorías</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-page="products" class="nav-item">
+                            <span class="nav-icon">🍕</span>
+                            <span class="nav-text">Productos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-page="orders" class="nav-item">
+                            <span class="nav-icon">🛒</span>
+                            <span class="nav-text">Pedidos</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="nav-divider"></div>
+                
+                <div class="nav-section">
+                    <span class="nav-section-title">OTRAS OPCIONES</span>
+                </div>
+                <ul class="nav-menu">
+                    <li>
+                        <a href="/src/pages/store/home/home.html" class="nav-item">
+                            <span class="nav-icon">🏪</span>
+                            <span class="nav-text">Ver Tienda</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </aside>

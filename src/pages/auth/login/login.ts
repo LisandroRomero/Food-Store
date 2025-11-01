@@ -1,5 +1,5 @@
 
-import { login } from "../../../utils/api";
+import { authService } from "../../../utils/services";
 import { obtenerSesion, guardarSesion, redirigirSegunRol } from "../../../utils/auth";
 
 // ============================================
@@ -33,7 +33,7 @@ async function hacerLogin(
     return false;
   }
   
-  const resultado = await login(email, password);
+  const resultado = await authService.login(email, password);
   
   if (resultado.success) {
     guardarSesion(resultado.data);
