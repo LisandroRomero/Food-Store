@@ -2,7 +2,7 @@
 // 📚 REGISTRO CON API
 // ============================================
 
-import { register } from "../../../utils/api";
+import { authService } from "../../../utils/services";
 import { obtenerSesion, guardarSesion, redirigirSegunRol } from "../../../utils/auth";
 
 // ============================================
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return false;
     }
     
-    const resultado = await register(nombre, apellido, email, password);
+    const resultado = await authService.register(nombre, apellido, email, password);
     
     if (resultado.success) {
       guardarSesion(resultado.data);
