@@ -74,7 +74,19 @@
         </div>
       </div>
     </div>
-    
     <script type="module" src="/src/main.ts"></script>
+    <script type="module">
+    import { obtenerSesion, redirigirSegunRol } from './src/utils/auth.ts';
+    
+    const sesion = obtenerSesion();
+    
+    if (sesion) {
+      // Si hay sesión, redirigir según rol
+      redirigirSegunRol();
+    } else {
+      // Si no hay sesión, ir a login
+      window.location.href = '/src/pages/auth/login/login.html';
+    }
+    </script>
   </body>
 </html>
