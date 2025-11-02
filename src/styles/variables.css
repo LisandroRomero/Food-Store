@@ -5,21 +5,30 @@
 
 :root {
   /* =========================
-     COLORES PRINCIPALES
+     COLORES DEL PROFESOR
      ========================= */
-  /* Colores de marca */
-  --color-primary: #ff5f41;
-  --color-primary-hover: #f87058;
-  --color-primary-dark: #e54d35;
+  --primary: #ff6b35;        /* Naranja principal */
+  --secondary: #f7931e;      /* Naranja secundario */
+  --dark: #2d3436;           /* Texto oscuro */
+  --light: #f5f6fa;          /* Fondo claro */
+  --success: #00b894;        /* Verde éxito */
+  --danger: #d63031;         /* Rojo peligro */
+  --gray: #dfe6e9;           /* Gris borders */
   
-  --color-secondary: #667eea;
-  --color-secondary-hover: #5a67d8;
+  /* Mantener estos para compatibilidad */
+  --color-primary: var(--primary);
+  --color-primary-hover: #e85d2a;
+  --color-primary-dark: #d4522a;
+  
+  --color-secondary: var(--secondary);
+  --color-secondary-hover: #e88319;
   
   /* Colores de UI */
-  --color-success: #28a745;
-  --color-danger: #dc3545;
+  --color-success: var(--success);
+  --color-danger: var(--danger);
   --color-warning: #ffc107;
   --color-info: #17a2b8;
+  --color-turquoise: #26C485;
   
   /* Escala de grises */
   --color-black: #000000;
@@ -35,9 +44,11 @@
   --color-white: #ffffff;
   
   /* Colores de fondo */
-  --bg-body: #f5f5f5;
+  --bg-body: var(--light);
   --bg-card: #ffffff;
-  --bg-dark: #242424;
+  --bg-dark: var(--dark);
+  --bg-sidebar: var(--dark);
+  --border-color: var(--gray);
   
   /* =========================
      TIPOGRAFÍA

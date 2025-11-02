@@ -1,0 +1,109 @@
+<!-- CONTENIDO DE CATEGORÍAS -->
+<div class="module-container">
+    <div class="module-card">
+        <!-- Header -->
+        <div class="module-header">
+            <div>
+                <h1 class="module-title">📁 Gestión de Categorías</h1>
+                <p class="module-subtitle">Administra las categorías de productos</p>
+            </div>
+            <button class="btn-new" id="btnNuevaCategoria">
+                <span>+</span> Nueva Categoría
+            </button>
+        </div>
+        
+        <!-- Mensajes -->
+        <div id="messageContainer"></div>
+        
+        <!-- Tabla -->
+        <div class="table-wrapper">
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">#</th>
+                        <th style="width: 80px;">Imagen</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th style="width: 180px;" class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="categoriesTableBody">
+                    <tr>
+                        <td colspan="5" class="text-center empty-message">
+                            <div class="loading-spinner"></div>
+                            <p>Cargando categorías...</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL PARA CREAR/EDITAR CATEGORÍA -->
+<div id="categoryModal" class="modal-overlay">
+    <div class="modal-container">
+        <div class="modal-box">
+            <!-- Header del Modal -->
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Nueva Categoría</h2>
+                <button type="button" class="modal-close" onclick="window.closeCategoryModal()">
+                    <span>×</span>
+                </button>
+            </div>
+            
+            <!-- Formulario -->
+            <form id="categoryForm">
+                <input type="hidden" id="categoryId">
+                
+                <div class="modal-body">
+                    <!-- Campo Nombre -->
+                    <div class="form-group">
+                        <label class="form-label">Nombre de la Categoría</label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="categoryName" 
+                            placeholder="Ej: Pizzas, Hamburguesas..."
+                            required
+                        >
+                    </div>
+                    
+                    <!-- Campo Descripción -->
+                    <div class="form-group">
+                        <label class="form-label">Descripción</label>
+                        <textarea 
+                            class="form-control" 
+                            id="categoryDescription" 
+                            placeholder="Describe esta categoría..."
+                            rows="3"
+                            required
+                        ></textarea>
+                    </div>
+                    
+                    <!-- Campo URL de Imagen -->
+                    <div class="form-group">
+                        <label class="form-label">URL de Imagen</label>
+                        <input 
+                            type="url" 
+                            class="form-control" 
+                            id="categoryImage" 
+                            placeholder="https://ejemplo.com/imagen.jpg"
+                        >
+                        <small class="form-hint">💡 Copia la URL de una imagen desde internet</small>
+                    </div>
+                </div>
+                
+                <!-- Footer del Modal -->
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="window.closeCategoryModal()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-save" id="btnGuardarCategoria">
+                        Guardar Categoría
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

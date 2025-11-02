@@ -15,76 +15,146 @@
     
 </head>
 <body>
+    <!-- HEADER MODERNO -->
     <header class="header">
         <div class="header-content">
-            <h1>🛠️ Panel de Administración</h1>
+            <div class="header-left">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div class="header-title">
+                    <h1>Panel de Administración</h1>
+                    <span class="header-subtitle">Food Store Admin</span>
+                </div>
+            </div>
             <div class="user-section">
-                <span id="userInfo"></span>
+                <div class="user-info">
+                    <span class="user-icon">👤</span>
+                    <span id="userInfo" class="user-name"></span>
+                </div>
                 <div id="logoutContainer"></div>
             </div>
         </div>
     </header>
 
-    <div class="container">
-        <div class="dashboard-grid">
-            <div class="card">
-                <h2 class="card-title">Usuarios Registrados</h2>
-                <div class="stat-number" id="totalUsers">0</div>
-                <div class="stat-label">Total de usuarios</div>
-            </div>
+    <div class="content-area">
 
-            <div class="card">
-                <h2 class="card-title">Sesiones Activas</h2>
-                <div class="stat-number">1</div>
-                <div class="stat-label">En este momento</div>
-            </div>
-
-            <div class="card">
-                <h2 class="card-title">Módulos</h2>
-                <div class="stat-number">3</div>
-                <div class="stat-label">Disponibles</div>
-            </div>
-
-            <div class="card">
-                <h2 class="card-title">Estado del Sistema</h2>
-                <div class="stat-number status-ok">✓</div>
-                <div class="stat-label">Operativo</div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2 class="card-title">Acciones Rápidas</h2>
-            <div class="actions">
-                <button class="btn btn-primary" onclick="window.location.href='/'">
-                    🏠 Inicio
-                </button>
-                <button class="btn btn-primary" onclick="window.location.href='/src/pages/client/index.html'">
-                    👥 Panel de Cliente
-                </button>
-                <button class="btn btn-secondary" id="viewUsersBtn">
-                    📋 Ver Usuarios
-                </button>
-                <button class="btn btn-secondary" id="clearStorageBtn">
-                    🗑️ Limpiar LocalStorage
-                </button>
-            </div>
-        </div>
-
-        <div class="card recent-activity">
-            <h2 class="card-title">Actividad Reciente</h2>
-            <div id="activityList">
-                <div class="activity-item">
-                    <div>Inicio de sesión exitoso</div>
-                    <div class="activity-time" id="loginTime"></div>
-                </div>
-                <div class="activity-item">
-                    <div>Acceso al panel de administración</div>
-                    <div class="activity-time">Hace un momento</div>
+        <!-- SIDEBAR MODERNO -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">🍕</span>
+                    <span class="logo-text">Food Store</span>
                 </div>
             </div>
-        </div>
-    </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <span class="nav-section-title">MENÚ PRINCIPAL</span>
+                </div>
+                <ul class="nav-menu">
+                    <li>
+                        <a href="#" data-page="adminHome" class="nav-item active">
+                            <span class="nav-icon">📊</span>
+                            <span class="nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-page="categories" class="nav-item">
+                            <span class="nav-icon">📁</span>
+                            <span class="nav-text">Categorías</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-page="products" class="nav-item">
+                            <span class="nav-icon">🍕</span>
+                            <span class="nav-text">Productos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-page="orders" class="nav-item">
+                            <span class="nav-icon">🛒</span>
+                            <span class="nav-text">Pedidos</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="nav-divider"></div>
+                
+                <div class="nav-section">
+                    <span class="nav-section-title">OTRAS OPCIONES</span>
+                </div>
+                <ul class="nav-menu">
+                    <li>
+                        <a href="/src/pages/store/home/home.html" class="nav-item">
+                            <span class="nav-icon">🏪</span>
+                            <span class="nav-text">Ver Tienda</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
 
-    <script type="module" src="./adminHome.ts"></script>
+        <main id="main-content-wrapper" class="main-content-wrapper">
+                                <div class="dashboard-grid">
+                        <div class="card">
+                            <h2 class="card-title">Usuarios Registrados</h2>
+                            <div class="stat-number" id="totalUsers">0</div>
+                            <div class="stat-label">Total de usuarios</div>
+                        </div>
+
+                        <div class="card">
+                            <h2 class="card-title">Sesiones Activas</h2>
+                            <div class="stat-number">1</div>
+                            <div class="stat-label">En este momento</div>
+                        </div>
+
+                        <div class="card">
+                            <h2 class="card-title">Módulos</h2>
+                            <div class="stat-number">3</div>
+                            <div class="stat-label">Disponibles</div>
+                        </div>
+
+                        <div class="card">
+                            <h2 class="card-title">Estado del Sistema</h2>
+                            <div class="stat-number status-ok">✓</div>
+                            <div class="stat-label">Operativo</div>
+                        </div>
+                    </div>
+
+                <div class="card">
+                    <h2 class="card-title">Acciones Rápidas</h2>
+                    <div class="actions">
+                        <button class="btn btn-primary" onclick="window.location.href='/'">
+                            🏠 Inicio
+                        </button>
+                        <button class="btn btn-primary" onclick="window.location.href='/src/pages/client/index.html'">
+                            👥 Panel de Cliente
+                        </button>
+                        <button class="btn btn-secondary" id="viewUsersBtn">
+                            📋 Ver Usuarios
+                        </button>
+                        <button class="btn btn-secondary" id="clearStorageBtn">
+                            🗑️ Limpiar LocalStorage
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card recent-activity">
+                    <h2 class="card-title">Actividad Reciente</h2>
+                    <div id="activityList">
+                        <div class="activity-item">
+                            <div>Inicio de sesión exitoso</div>
+                            <div class="activity-time" id="loginTime"></div>
+                        </div>
+                        <div class="activity-item">
+                            <div>Acceso al panel de administración</div>
+                            <div class="activity-time">Hace un momento</div>
+                        </div>
+                    </div>
+                </div>
+        </main>
+    </div> <script type="module" src="./adminHome.ts"></script>
 </body>
 </html>
