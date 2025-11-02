@@ -60,7 +60,7 @@ function cargarEstadisticas(): void {
 }
 
 // ============================================
-// 🔘 Configurar botones
+//  Configurar botones
 // ============================================
 function configurarBotones(): void {
   // Botón para ver usuarios
@@ -133,10 +133,7 @@ function mostrarHoraLogin(): void {
   }
 }
 
-console.log('🛠️ Panel de administración cargado');
-
 //siddebar
-
 // Define la estructura de tu proyecto para mapear el data-page a la URL del archivo
 const pageMap: { [key: string]: string } = {
     adminHome: 'dashboard', 

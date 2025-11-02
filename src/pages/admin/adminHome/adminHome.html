@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración</title>
     
-    <!-- Estilos globales (en orden) -->
+    <!-- Estilos globales -->
     <link rel="stylesheet" href="../../../styles/variables.css">
     <link rel="stylesheet" href="../../../styles/global.css">
     <link rel="stylesheet" href="../../../styles/components.css">
@@ -35,7 +35,7 @@
     </header>
 
     <div class="admin-layout">
-        <!-- Sidebar moderno y limpio -->
+        <!-- Sidebar  -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <span class="sidebar-logo">🍕</span>
@@ -67,65 +67,72 @@
         </aside>
 
         <!-- Contenido principal -->
-        <main class="main-content" id="main-content-wrapper">
-            <div class="dashboard-grid">
-            <div class="card">
-                <h2 class="card-title">Usuarios Registrados</h2>
-                <div class="stat-number" id="totalUsers">0</div>
-                <div class="stat-label">Total de usuarios</div>
+    <main class="main-content" id="main-content-wrapper">
+        <!-- Bienvenida -->
+        <div class="welcome-section">
+            <h2>Bienvenido al Panel de Administración</h2>
+            <p>Gestiona tu tienda de comida desde aquí</p>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="dashboard-grid">
+            <div class="stat-card">
+                <span class="stat-label">Usuarios Registrados</span>
+                <span class="stat-number" id="totalUsers">0</span>
+                <span class="stat-subtitle">Total de usuarios</span>
             </div>
 
-            <div class="card">
-                <h2 class="card-title">Sesiones Activas</h2>
-                <div class="stat-number">1</div>
-                <div class="stat-label">En este momento</div>
+            <div class="stat-card">
+                <span class="stat-label">Sesiones Activas</span>
+                <span class="stat-number">1</span>
+                <span class="stat-subtitle">En este momento</span>
             </div>
 
-            <div class="card">
-                <h2 class="card-title">Módulos</h2>
-                <div class="stat-number">3</div>
-                <div class="stat-label">Disponibles</div>
+            <div class="stat-card">
+                <span class="stat-label">Módulos</span>
+                <span class="stat-number">3</span>
+                <span class="stat-subtitle">Disponibles</span>
             </div>
 
-            <div class="card">
-                <h2 class="card-title">Estado del Sistema</h2>
-                <div class="stat-number status-ok">✓</div>
-                <div class="stat-label">Operativo</div>
+            <div class="stat-card">
+                <span class="stat-label">Estado del Sistema</span>
+                <span class="stat-number status-ok">✓</span>
+                <span class="stat-subtitle">Operativo</span>
             </div>
         </div>
 
-        <div class="card">
-            <h2 class="card-title">Acciones Rápidas</h2>
+        <!-- Acciones Rápidas -->
+        <div class="quick-actions">
+            <h3>Acciones Rápidas</h3>
             <div class="actions">
-                <button class="btn btn-primary" onclick="window.location.href='/'">
+                <button class="action-btn" onclick="window.location.href='/'">
                     🏠 Inicio
                 </button>
-                <button class="btn btn-primary" onclick="window.location.href='/src/pages/client/index.html'">
+                <button class="action-btn" onclick="window.location.href='/src/pages/client/index.html'">
                     👥 Panel de Cliente
                 </button>
-                <button class="btn btn-secondary" id="viewUsersBtn">
+                <button class="action-btn" id="viewUsersBtn">
                     📋 Ver Usuarios
                 </button>
-                <button class="btn btn-secondary" id="clearStorageBtn">
+                <button class="action-btn" id="clearStorageBtn">
                     🗑️ Limpiar LocalStorage
                 </button>
             </div>
         </div>
 
-        <div class="card recent-activity">
-            <h2 class="card-title">Actividad Reciente</h2>
-            <div id="activityList">
-                <div class="activity-item">
-                    <div>Inicio de sesión exitoso</div>
-                    <div class="activity-time" id="loginTime"></div>
-                </div>
-                <div class="activity-item">
-                    <div>Acceso al panel de administración</div>
-                    <div class="activity-time">Hace un momento</div>
-                </div>
-                </div>
+        <!-- Actividad Reciente -->
+        <div class="quick-actions">
+            <h3>Actividad Reciente</h3>
+            <div class="activity-item">
+                <div>Inicio de sesión exitoso</div>
+                <div class="activity-time" id="loginTime"></div>
             </div>
-        </main>
+            <div class="activity-item">
+                <div>Acceso al panel de administración</div>
+                <div class="activity-time">Hace un momento</div>
+            </div>
+        </div>
+    </main>
     </div>
 
     <!-- Overlay para móvil -->
