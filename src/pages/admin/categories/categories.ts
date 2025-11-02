@@ -1,104 +1,11 @@
-import type { ICategoria } from "../../../types/ICategoria";
+// categories.ts - Módulo de gestión de categorías
 import { categoriesService } from "../../../utils/services";
+import { mostrarExito, mostrarError } from '../../../utils/notifications';
+import type { ICategoria } from "../../../types/ICategoria";
 
-// Declarar funciones globales para TypeScript
-declare global {
-    interface Window {
-        editarCategoria: (id: number) => Promise<void>;
-        eliminarCategoria: (id: number) => Promise<void>;
-        closeCategoryModal: () => void;
-    }
-}
-
+// Variables globales del módulo
 let categorias: ICategoria[] = [];
 let categoriaEditando: ICategoria | null = null;
-
-// Sistema de notificaciones elegante
-function mostrarExito(mensaje: string): void {
-    mostrarNotificacion(mensaje, 'success');
-}
-
-function mostrarError(mensaje: string): void {
-    mostrarNotificacion(mensaje, 'error');
-}
-
-function mostrarNotificacion(mensaje: string, tipo: 'success' | 'error'): void {
-    const container = document.getElementById('messageContainer');
-    if (!container) return;
-    
-    const icon = tipo === 'success' ? '✅' : '❌';
-    const bgColor = tipo === 'success' ? '#d4edda' : '#f8d7da';
-    const textColor = tipo === 'success' ? '#155724' : '#721c24';
-    const borderColor = tipo === 'success' ? '#c3e6cb' : '#f5c6cb';
-    
-    const alertDiv = document.createElement('div');
-    alertDiv.className = `alert alert-${tipo}`;
-    alertDiv.style.cssText = `
-        padding: 1rem 1.5rem;
-        border-radius: 8px;
-        margin: 1rem 0;
-        font-weight: 500;
-        background: ${bgColor};
-        color: ${textColor};
-        border: 1px solid ${borderColor};
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        animation: slideInDown 0.3s ease-out;
-    `;
-    
-    alertDiv.innerHTML = `
-        <span style="font-size: 1.2rem;">${icon}</span>
-        <span>${mensaje}</span>
-        <button onclick="this.parentElement.remove()" style="
-            margin-left: auto;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-            color: ${textColor};
-            opacity: 0.7;
-        ">×</button>
-    `;
-    
-    container.appendChild(alertDiv);
-    
-    // Auto-remove después de 5 segundos
-    setTimeout(() => {
-        if (alertDiv.parentElement) {
-            alertDiv.style.animation = 'fadeOut 0.3s ease-out';
-            setTimeout(() => alertDiv.remove(), 300);
-        }
-    }, 5000);
-}
-
-// Agregar estilos para animaciones
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideInDown {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    @keyframes fadeOut {
-        from {
-            opacity: 1;
-            transform: scale(1);
-        }
-        to {
-            opacity: 0;
-            transform: scale(0.95);
-        }
-    }
-`;
-document.head.appendChild(style);
 
 // Función de inicialización 
 export async function init(): Promise<void> {
@@ -108,10 +15,10 @@ export async function init(): Promise<void> {
     await cargarCategorias();
 }
 
-// Configurar listeners de eventos con funcionalidades modernas
+// Configurar listeners de eventos
 function setupEventListeners(): void {
-    
-    const btnNueva = document.getElementById('btnNuevaCategoria') as HTMLButtonElement;
+    // Botón nueva categoría
+    const btnNueva = document.getElementById('btnNuevaCategoria');
     if (btnNueva) {
         btnNueva.addEventListener('click', () => abrirModalCategoria());
     }
@@ -122,10 +29,16 @@ function setupEventListeners(): void {
         form.addEventListener('submit', handleSubmit);
     }
     
+    // Event delegation para botones de acción en la tabla
+    const tbody = document.getElementById('categoriesTableBody');
+    if (tbody) {
+        tbody.addEventListener('click', handleTableActions);
+    }
+    
     // Cerrar modal con ESC
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            window.closeCategoryModal();
+            cerrarModal();
         }
     });
     
@@ -134,9 +47,44 @@ function setupEventListeners(): void {
     if (modal) {
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
-                window.closeCategoryModal();
+                cerrarModal();
             }
         });
+    }
+    
+    // Botón cerrar modal
+    const btnCerrar = modal?.querySelector('.modal-close');
+    if (btnCerrar) {
+        btnCerrar.addEventListener('click', cerrarModal);
+    }
+    
+    // Botón cancelar del footer
+    const btnCancelar = modal?.querySelector('.btn-cancel');
+    if (btnCancelar) {
+        btnCancelar.addEventListener('click', cerrarModal);
+    }
+}
+
+// Manejar acciones de la tabla con event delegation
+function handleTableActions(e: Event): void {
+    const target = e.target as HTMLElement;
+    const btn = target.closest('button') as HTMLButtonElement;
+    
+    if (!btn) return;
+    
+    // Obtener el ID de la categoría desde el atributo data
+    const row = btn.closest('tr');
+    if (!row) return;
+    
+    const idCell = row.querySelector('td:first-child');
+    if (!idCell) return;
+    
+    const id = parseInt(idCell.textContent || '0');
+    
+    if (btn.classList.contains('btn-edit')) {
+        editarCategoria(id);
+    } else if (btn.classList.contains('btn-delete')) {
+        eliminarCategoria(id);
     }
 }
 
@@ -156,7 +104,7 @@ async function cargarCategorias(): Promise<void> {
     }
 }
 
-// Renderizar tabla de categorías con diseño moderno
+// Renderizar tabla de categorías
 function renderizarTablaCategorias(categoriasAMostrar: ICategoria[]): void {
     const tbody = document.getElementById('categoriesTableBody');
     if (!tbody) return;
@@ -181,18 +129,18 @@ function renderizarTablaCategorias(categoriasAMostrar: ICategoria[]): void {
                 <img src="${categoria.imagen}" 
                      alt="${categoria.nombre}" 
                      class="category-img"
-                     onerror="this.src='https://via.placeholder.com/60x60/667eea/ffffff?text=IMG'"
+                     onerror="this.src='https://via.placeholder.com/60x60/667eea/ffffff?text=CAT'"
                      loading="lazy">
             </td>
             <td><strong>${categoria.nombre}</strong></td>
-            <td>${categoria.descripcion || 'Sin descripción'}</td>
+            <td>${categoria.descripcion}</td>
             <td>
                 <div class="action-buttons">
-                    <button class="btn-edit" onclick="window.editarCategoria(${categoria.id})">
-                        ✏️ Editar
+                    <button class="btn-edit">
+                        Editar
                     </button>
-                    <button class="btn-delete" onclick="window.eliminarCategoria(${categoria.id})">
-                        🗑️ Eliminar
+                    <button class="btn-delete">
+                        Eliminar
                     </button>
                 </div>
             </td>
@@ -202,7 +150,7 @@ function renderizarTablaCategorias(categoriasAMostrar: ICategoria[]): void {
 
 // Abrir modal para crear/editar categoría
 function abrirModalCategoria(categoria?: ICategoria): void {
-    const modal = document.getElementById('categoryModal') as HTMLElement;
+    const modal = document.getElementById('categoryModal');
     const modalTitle = document.getElementById('modalTitle');
     const form = document.getElementById('categoryForm') as HTMLFormElement;
     
@@ -211,7 +159,7 @@ function abrirModalCategoria(categoria?: ICategoria): void {
         return;
     }
     
-    console.log('🔓 Abriendo modal...');
+    console.log('🔓 Abriendo modal de categoría...');
     
     categoriaEditando = categoria || null;
     
@@ -226,7 +174,6 @@ function abrirModalCategoria(categoria?: ICategoria): void {
         form.reset();
     }
     
-    // Mostrar modal con la clase active
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
     
@@ -234,9 +181,9 @@ function abrirModalCategoria(categoria?: ICategoria): void {
 }
 
 // Cerrar modal
-window.closeCategoryModal = function(): void {
+function cerrarModal(): void {
     console.log('🔒 Cerrando modal...');
-    const modal = document.getElementById('categoryModal') as HTMLElement;
+    const modal = document.getElementById('categoryModal');
     if (modal) {
         modal.classList.remove('active');
         document.body.style.overflow = '';
@@ -248,9 +195,9 @@ window.closeCategoryModal = function(): void {
         console.log('✅ Modal cerrado');
     }
     categoriaEditando = null;
-};
+}
 
-// Manejar envío del formulario 
+// Manejar envío del formulario
 async function handleSubmit(e: Event): Promise<void> {
     e.preventDefault();
     
@@ -268,12 +215,12 @@ async function handleSubmit(e: Event): Promise<void> {
         imagen: (document.getElementById('categoryImage') as HTMLInputElement).value.trim()
     };
     
-    // Validaciones mejoradas
+    // Validaciones
     if (!formData.nombre) {
         mostrarError('El nombre es requerido');
         if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.textContent = 'Guardar';
+            submitBtn.textContent = 'Guardar Categoría';
         }
         return;
     }
@@ -282,7 +229,7 @@ async function handleSubmit(e: Event): Promise<void> {
         mostrarError('La descripción es requerida');
         if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.textContent = 'Guardar';
+            submitBtn.textContent = 'Guardar Categoría';
         }
         return;
     }
@@ -291,9 +238,9 @@ async function handleSubmit(e: Event): Promise<void> {
         let response;
         if (categoriaEditando) {
             response = await categoriesService.actualizarCategoria(
-                categoriaEditando.id.toString(), 
-                formData.nombre, 
-                formData.descripcion, 
+                categoriaEditando.id.toString(),
+                formData.nombre,
+                formData.descripcion,
                 formData.imagen
             );
             if (response.success) {
@@ -304,8 +251,8 @@ async function handleSubmit(e: Event): Promise<void> {
             }
         } else {
             response = await categoriesService.crearCategoria(
-                formData.nombre, 
-                formData.descripcion, 
+                formData.nombre,
+                formData.descripcion,
                 formData.imagen
             );
             if (response.success) {
@@ -316,7 +263,7 @@ async function handleSubmit(e: Event): Promise<void> {
             }
         }
         
-        window.closeCategoryModal();
+        cerrarModal();
         await cargarCategorias();
         
     } catch (error) {
@@ -326,25 +273,24 @@ async function handleSubmit(e: Event): Promise<void> {
         // Restaurar botón
         if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.textContent = 'Guardar';
+            submitBtn.textContent = 'Guardar Categoría';
         }
     }
 }
 
-// Editar categoría (función global para onclick)
-window.editarCategoria = async function(id: number): Promise<void> {
+// Editar categoría
+function editarCategoria(id: number): void {
     const categoria = categorias.find(c => c.id === id);
     if (categoria) {
         abrirModalCategoria(categoria);
     }
-};
+}
 
-// Eliminar categoría con confirmación elegante (función global para onclick)
-window.eliminarCategoria = async function(id: number): Promise<void> {
+// Eliminar categoría
+async function eliminarCategoria(id: number): Promise<void> {
     const categoria = categorias.find(c => c.id === id);
     if (!categoria) return;
     
-    // Confirmación más elegante
     const confirmacion = confirm(`🗑️ ¿Está seguro de eliminar la categoría "${categoria.nombre}"?\n\nEsta acción no se puede deshacer.`);
     if (!confirmacion) return;
     
@@ -360,7 +306,7 @@ window.eliminarCategoria = async function(id: number): Promise<void> {
         console.error('Error al eliminar categoría:', error);
         mostrarError('Error al eliminar la categoría');
     }
-};
+}
 
-// Exportar init como default también por si acaso
+// Exportar init como default
 export default init;

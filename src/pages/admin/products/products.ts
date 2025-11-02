@@ -1,16 +1,8 @@
 // products.ts - Módulo de gestión de productos
 import { productsService, categoriesService } from '../../../utils/services';
+import { mostrarExito, mostrarError } from '../../../utils/notifications';
 import type { IProduct } from '../../../types/IProduct';
 import type { ICategoria } from '../../../types/ICategoria';
-
-// Declarar funciones globales para TypeScript
-declare global {
-    interface Window {
-        editarProducto: (id: number) => Promise<void>;
-        eliminarProducto: (id: number) => Promise<void>;
-        closeProductModal: () => void;
-    }
-}
 
 // Variables globales del módulo
 let productos: IProduct[] = [];
@@ -44,10 +36,16 @@ function setupEventListeners(): void {
         form.addEventListener('submit', handleSubmit);
     }
     
+    // Event delegation para botones de acción en la tabla
+    const tbody = document.getElementById('productsTableBody');
+    if (tbody) {
+        tbody.addEventListener('click', handleTableActions);
+    }
+    
     // Cerrar modal con ESC
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            window.closeProductModal();
+            cerrarModal();
         }
     });
     
@@ -56,9 +54,44 @@ function setupEventListeners(): void {
     if (modal) {
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
-                window.closeProductModal();
+                cerrarModal();
             }
         });
+    }
+    
+    // Botón cerrar modal
+    const btnCerrar = modal?.querySelector('.modal-close');
+    if (btnCerrar) {
+        btnCerrar.addEventListener('click', cerrarModal);
+    }
+    
+    // Botón cancelar del footer
+    const btnCancelar = modal?.querySelector('.btn-cancel');
+    if (btnCancelar) {
+        btnCancelar.addEventListener('click', cerrarModal);
+    }
+}
+
+// Manejar acciones de la tabla con event delegation
+function handleTableActions(e: Event): void {
+    const target = e.target as HTMLElement;
+    const btn = target.closest('button') as HTMLButtonElement;
+    
+    if (!btn) return;
+    
+    // Obtener el ID del producto desde el atributo data
+    const row = btn.closest('tr');
+    if (!row) return;
+    
+    const idCell = row.querySelector('td:first-child');
+    if (!idCell) return;
+    
+    const id = parseInt(idCell.textContent || '0');
+    
+    if (btn.classList.contains('btn-edit')) {
+        editarProducto(id);
+    } else if (btn.classList.contains('btn-delete')) {
+        eliminarProducto(id);
     }
 }
 
@@ -135,10 +168,10 @@ function renderizarTablaProductos(productosAMostrar: IProduct[]): void {
             </td>
             <td>
                 <div class="action-buttons">
-                    <button class="btn-edit" onclick="window.editarProducto(${producto.id})">
+                    <button class="btn-edit">
                         Editar
                     </button>
-                    <button class="btn-delete" onclick="window.eliminarProducto(${producto.id})">
+                    <button class="btn-delete">
                         Eliminar
                     </button>
                 </div>
@@ -204,7 +237,7 @@ function abrirModalProducto(producto?: IProduct): void {
 }
 
 // Cerrar modal
-window.closeProductModal = function(): void {
+function cerrarModal(): void {
     console.log('🔒 Cerrando modal...');
     const modal = document.getElementById('productModal');
     if (modal) {
@@ -218,7 +251,7 @@ window.closeProductModal = function(): void {
         console.log('✅ Modal cerrado');
     }
     productoEditando = null;
-};
+}
 
 // Manejar envío del formulario
 async function handleSubmit(e: Event): Promise<void> {
@@ -272,7 +305,7 @@ async function handleSubmit(e: Event): Promise<void> {
             }
         }
         
-        window.closeProductModal();
+        cerrarModal();
         await cargarProductos();
         
     } catch (error) {
@@ -287,20 +320,19 @@ async function handleSubmit(e: Event): Promise<void> {
     }
 }
 
-// Editar producto (función global para onclick)
-window.editarProducto = async function(id: number): Promise<void> {
+// Editar producto
+function editarProducto(id: number): void {
     const producto = productos.find(p => p.id === id);
     if (producto) {
         abrirModalProducto(producto);
     }
-};
+}
 
-// Eliminar producto (función global para onclick)
-window.eliminarProducto = async function(id: number): Promise<void> {
+// Eliminar producto
+async function eliminarProducto(id: number): Promise<void> {
     const producto = productos.find(p => p.id === id);
     if (!producto) return;
     
-    // Confirmación más elegante
     const confirmacion = confirm(`🗑️ ¿Está seguro de eliminar el producto "${producto.nombre}"?\n\nEsta acción no se puede deshacer.`);
     if (!confirmacion) return;
     
@@ -316,90 +348,7 @@ window.eliminarProducto = async function(id: number): Promise<void> {
         console.error('Error al eliminar producto:', error);
         mostrarError('Error al eliminar el producto');
     }
-};
-
-// Filtrar productos por búsqueda
-function filtrarProductos(searchTerm: string): void {
-    const filtrados = productos.filter(p => 
-        p.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    renderizarTablaProductos(filtrados);
 }
 
-// Filtrar por categoría
-function filtrarPorCategoria(categoriaId: string): void {
-    if (!categoriaId) {
-        renderizarTablaProductos(productos);
-        return;
-    }
-    
-    const filtrados = productos.filter(p => 
-        p.categoria?.id?.toString() === categoriaId
-    );
-    renderizarTablaProductos(filtrados);
-}
-
-// Filtrar por estado
-function filtrarPorEstado(estado: string): void {
-    let filtrados = productos;
-    
-    switch(estado) {
-        case 'disponible':
-            filtrados = productos.filter(p => p.disponible && p.stock > 0);
-            break;
-        case 'no-disponible':
-            filtrados = productos.filter(p => !p.disponible);
-            break;
-        case 'sin-stock':
-            filtrados = productos.filter(p => p.stock === 0);
-            break;
-    }
-    
-    renderizarTablaProductos(filtrados);
-}
-
-// Sistema de notificaciones elegante
-function mostrarExito(mensaje: string): void {
-    mostrarNotificacion(mensaje, 'success');
-}
-
-function mostrarError(mensaje: string): void {
-    mostrarNotificacion(mensaje, 'error');
-}
-
-function mostrarNotificacion(mensaje: string, tipo: 'success' | 'error'): void {
-    const container = document.getElementById('messageContainer');
-    if (!container) return;
-    
-    const icon = tipo === 'success' ? '✅' : '❌';
-    const alertClass = tipo === 'success' ? 'alert-success' : 'alert-error';
-    
-    const alertDiv = document.createElement('div');
-    alertDiv.className = `alert ${alertClass}`;
-    alertDiv.innerHTML = `
-        <span style="font-size: 1.2rem;">${icon}</span>
-        <span>${mensaje}</span>
-        <button onclick="this.parentElement.remove()" style="
-            margin-left: auto;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-            opacity: 0.7;
-        ">×</button>
-    `;
-    
-    container.appendChild(alertDiv);
-    
-    // Auto-remove después de 5 segundos
-    setTimeout(() => {
-        if (alertDiv.parentElement) {
-            alertDiv.style.animation = 'fadeOut 0.3s ease-out';
-            setTimeout(() => alertDiv.remove(), 300);
-        }
-    }, 5000);
-}
-
-// Exportar init como default también por si acaso
+// Exportar init como default
 export default init;

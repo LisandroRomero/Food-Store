@@ -1,7 +1,7 @@
-import { protegerPaginaAdmin, mostrarInfoUsuario, crearBotonCerrarSesion, obtenerSesion } from '../../../utils/auth';
+import { protegerPagina, mostrarInfoUsuario, crearBotonCerrarSesion, obtenerSesion } from '../../../utils/auth';
 
 // 🛡️ Proteger esta página (solo usuarios autenticados)
-const sesion = protegerPaginaAdmin();
+const sesion = protegerPagina();
 
 if (sesion) {
   // Mostrar información del usuario
@@ -18,6 +18,30 @@ if (sesion) {
   
   // Mostrar hora de login
   mostrarHoraLogin();
+  
+  // Configurar menú móvil
+  setupMobileMenu();
+}
+
+//mobile
+function setupMobileMenu(): void {
+  const toggle = document.getElementById('mobileMenuToggle');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  
+  if (toggle && sidebar && overlay) {
+    // Abrir/cerrar sidebar
+    toggle.addEventListener('click', () => {
+      sidebar.classList.toggle('show');
+      overlay.classList.toggle('show');
+    });
+    
+    // Cerrar al hacer clic en overlay
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('show');
+      overlay.classList.remove('show');
+    });
+  }
 }
 
 // ============================================
@@ -111,14 +135,11 @@ function mostrarHoraLogin(): void {
 
 console.log('🛠️ Panel de administración cargado');
 
-// ============================================
-// ⏰ Side Bar
-// ============================================
+//siddebar
 
 // Define la estructura de tu proyecto para mapear el data-page a la URL del archivo
-// Ahora apunta a archivos de contenido parcial, no páginas completas
 const pageMap: { [key: string]: string } = {
-    adminHome: 'dashboard', // caso especial 
+    adminHome: 'dashboard', 
     categories: '../categories/categories-content.html', 
     products: '../products/products-content.html',       
     orders: '../orders/orders-content.html',
@@ -127,13 +148,11 @@ const pageMap: { [key: string]: string } = {
 const contentArea = document.getElementById('main-content-wrapper') as HTMLElement | null;
 const sidebarNav = document.querySelector('.sidebar-nav') as HTMLElement | null;
 
-
 async function loadContent(pageKey: string): Promise<void> {
     if (!contentArea) return;
 
     // Caso especial para el dashboard
     if (pageKey === 'adminHome') {
-        // Mostrar el contenido original del dashboard
         showDashboard();
         updateActiveNav(pageKey);
         return;
@@ -154,8 +173,9 @@ async function loadContent(pageKey: string): Promise<void> {
         // Mostrar loading
         contentArea.innerHTML = `
             <div class="loading-container text-center p-4">
-                <div class="spinner"></div>
-                <p class="mt-2">Cargando ${pageKey}...</p>
+                <div style="text-align: center; padding: 2rem;">
+                    <p style="font-size: 1.5rem;">⏳ Cargando ${pageKey}...</p>
+                </div>
             </div>
         `;
 
@@ -168,19 +188,17 @@ async function loadContent(pageKey: string): Promise<void> {
         const html = await response.text();
         contentArea.innerHTML = html;
 
-        // Cargar CSS específico del módulo si existe
+        // Cargar CSS específico del módulo
         loadModuleCSS(pageKey);
         
-        // Cargar e inicializar el módulo JavaScript correspondiente
+        // Cargar e inicializar el módulo TypeScript
         try {
             let module: any;
-            // Import estáticos para que Vite pueda analizarlos
             if (pageKey === 'categories') {
                 module = await import('../categories/categories.js');
             } else if (pageKey === 'products') {
                 module = await import('../products/products.js');
             } else if (pageKey === 'orders') {
-                // Módulo aún no implementado
                 console.log('Módulo de pedidos aún no está implementado');
                 return;
             }
@@ -194,14 +212,13 @@ async function loadContent(pageKey: string): Promise<void> {
             console.error(`Error al cargar módulo ${pageKey}:`, moduleError);
         }
 
-        // Actualizar navegación activa
         updateActiveNav(pageKey);
 
     } catch (error) {
         console.error('Error al cargar contenido:', error);
         contentArea.innerHTML = `
-            <div class="alert alert-danger">
-                <h3>Error de Carga</h3>
+            <div style="text-align: center; padding: 2rem;">
+                <h3>❌ Error de Carga</h3>
                 <p>No se pudo cargar el contenido de ${pageKey}</p>
                 <small>${error instanceof Error ? error.message : 'Error desconocido'}</small>
             </div>
@@ -209,7 +226,7 @@ async function loadContent(pageKey: string): Promise<void> {
     }
 }
 
-// Función para mostrar el dashboard original
+// Mostrar el dashboard original
 function showDashboard(): void {
     if (!contentArea) return;
     
@@ -279,7 +296,7 @@ function showDashboard(): void {
     mostrarHoraLogin();
 }
 
-// Función para actualizar la navegación activa
+// Actualizar navegación activa
 function updateActiveNav(pageKey: string): void {
     const navLinks = document.querySelectorAll('.sidebar-nav a');
     navLinks.forEach(link => {
@@ -290,18 +307,15 @@ function updateActiveNav(pageKey: string): void {
     });
 }
 
-// Función para cargar CSS específico del módulo
+// Cargar CSS específico del módulo
 function loadModuleCSS(pageKey: string): void {
-    // Remover CSS de módulos anteriores
     const oldModuleCSS = document.getElementById('module-css');
     if (oldModuleCSS) {
         oldModuleCSS.remove();
     }
     
-    // No cargar CSS para el dashboard
     if (pageKey === 'adminHome') return;
     
-    // Crear nuevo link de CSS con ruta correcta desde adminHome.html
     const link = document.createElement('link');
     link.id = 'module-css';
     link.rel = 'stylesheet';
@@ -311,11 +325,9 @@ function loadModuleCSS(pageKey: string): void {
     console.log(`📄 CSS cargado: ../${pageKey}/${pageKey}.css`);
 }
 
-
+// Manejar clicks en el sidebar
 function handleSidebarClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    
-    // Buscar el elemento <a> más cercano (puede ser el target o un padre)
     const link = target.closest('a[data-page]') as HTMLAnchorElement;
     
     if (link && link.hasAttribute('data-page')) {
@@ -325,60 +337,22 @@ function handleSidebarClick(event: MouseEvent): void {
         if (pageKey) {
             loadContent(pageKey);
 
-            // Actualiza la clase 'active' para resaltar el enlace actual
             const currentActive = document.querySelector('.sidebar-nav .nav-item.active');
             if (currentActive) {
                 currentActive.classList.remove('active');
             }
             link.classList.add('active');
             
-            // Cerrar sidebar en móvil después de seleccionar
+            // Cerrar sidebar en móvil
             if (window.innerWidth <= 768) {
-                closeMobileSidebar();
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebarOverlay');
+                sidebar?.classList.remove('show');
+                overlay?.classList.remove('show');
             }
         }
     }
 }
 
+// Escuchar clicks en el sidebar
 sidebarNav?.addEventListener('click', handleSidebarClick);
-
-// ============================================
-// 📱 Funcionalidad de menú móvil
-// ============================================
-function setupMobileMenu(): void {
-    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-    const sidebar = document.getElementById('sidebar');
-    
-    if (mobileMenuToggle && sidebar) {
-        // Crear overlay
-        const overlay = document.createElement('div');
-        overlay.className = 'sidebar-overlay';
-        document.body.appendChild(overlay);
-        
-        // Toggle del menú
-        mobileMenuToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('mobile-open');
-            overlay.classList.toggle('active');
-        });
-        
-        // Cerrar al hacer clic en el overlay
-        overlay.addEventListener('click', () => {
-            closeMobileSidebar();
-        });
-    }
-}
-
-function closeMobileSidebar(): void {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.querySelector('.sidebar-overlay');
-    
-    if (sidebar) {
-        sidebar.classList.remove('mobile-open');
-    }
-    if (overlay) {
-        overlay.classList.remove('active');
-    }
-}
-
-// Inicializar menú móvil
-setupMobileMenu();
