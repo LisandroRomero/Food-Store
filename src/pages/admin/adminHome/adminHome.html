@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración</title>
     
-    <!-- Estilos globales -->
-    <link rel="stylesheet" href="../../../styles/variables.css">
-    <link rel="stylesheet" href="../../../styles/global.css">
-    <link rel="stylesheet" href="../../../styles/components.css">
-    
+    <!-- Estilos globales (unificados) -->
+    <link rel="stylesheet" href="/src/styles/styles-unified.css">
+    <!-- Estilos globales del panel de administración -->
+    <link rel="stylesheet" href="../admin-styles.css">
     <!-- Estilos específicos de esta página -->
     <link rel="stylesheet" href="styles.css">
     
@@ -68,70 +67,7 @@
 
         <!-- Contenido principal -->
     <main class="main-content" id="main-content-wrapper">
-        <!-- Bienvenida -->
-        <div class="welcome-section">
-            <h2>Bienvenido al Panel de Administración</h2>
-            <p>Gestiona tu tienda de comida desde aquí</p>
-        </div>
 
-        <!-- Estadísticas -->
-        <div class="dashboard-grid">
-            <div class="stat-card">
-                <span class="stat-label">Usuarios Registrados</span>
-                <span class="stat-number" id="totalUsers">0</span>
-                <span class="stat-subtitle">Total de usuarios</span>
-            </div>
-
-            <div class="stat-card">
-                <span class="stat-label">Sesiones Activas</span>
-                <span class="stat-number">1</span>
-                <span class="stat-subtitle">En este momento</span>
-            </div>
-
-            <div class="stat-card">
-                <span class="stat-label">Módulos</span>
-                <span class="stat-number">3</span>
-                <span class="stat-subtitle">Disponibles</span>
-            </div>
-
-            <div class="stat-card">
-                <span class="stat-label">Estado del Sistema</span>
-                <span class="stat-number status-ok">✓</span>
-                <span class="stat-subtitle">Operativo</span>
-            </div>
-        </div>
-
-        <!-- Acciones Rápidas -->
-        <div class="quick-actions">
-            <h3>Acciones Rápidas</h3>
-            <div class="actions">
-                <button class="action-btn" onclick="window.location.href='/'">
-                    🏠 Inicio
-                </button>
-                <button class="action-btn" onclick="window.location.href='/src/pages/client/index.html'">
-                    👥 Panel de Cliente
-                </button>
-                <button class="action-btn" id="viewUsersBtn">
-                    📋 Ver Usuarios
-                </button>
-                <button class="action-btn" id="clearStorageBtn">
-                    🗑️ Limpiar LocalStorage
-                </button>
-            </div>
-        </div>
-
-        <!-- Actividad Reciente -->
-        <div class="quick-actions">
-            <h3>Actividad Reciente</h3>
-            <div class="activity-item">
-                <div>Inicio de sesión exitoso</div>
-                <div class="activity-time" id="loginTime"></div>
-            </div>
-            <div class="activity-item">
-                <div>Acceso al panel de administración</div>
-                <div class="activity-time">Hace un momento</div>
-            </div>
-        </div>
     </main>
     </div>
 

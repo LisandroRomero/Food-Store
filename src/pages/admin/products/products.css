@@ -3,10 +3,9 @@
    Importa estilos compartidos y agrega solo lo específico
    ========================================================================== */
 
-/* Importar estilos compartidos de admin */
-@import '../shared-admin.css';
-
-/* ESTILOS ESPECÍFICOS DE PRODUCTOS */
+/* ESTILOS ESPECÍFICOS DE PRODUCTOS
+   NOTE: shared admin styles are now provided by ../admin-styles.css (loaded by admin shell)
+*/
 
 /* Imagen del producto en la tabla */
 .product-img {

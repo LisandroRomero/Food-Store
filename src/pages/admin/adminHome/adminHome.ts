@@ -23,6 +23,7 @@ if (sesion) {
   setupMobileMenu();
 }
 
+
 //mobile
 function setupMobileMenu(): void {
   const toggle = document.getElementById('mobileMenuToggle');
@@ -353,3 +354,9 @@ function handleSidebarClick(event: MouseEvent): void {
 
 // Escuchar clicks en el sidebar
 sidebarNav?.addEventListener('click', handleSidebarClick);
+
+// Mostrar el dashboard por defecto solo después de que todas las referencias DOM estén inicializadas
+if (sesion) {
+    // loadContent comprobará contentArea internamente
+    loadContent('adminHome');
+}

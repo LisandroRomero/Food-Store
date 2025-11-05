@@ -1,4 +1,9 @@
+/* Admin unified styles
+   Merge of shared-admin.css + product/category specific rules
+   Keep this file as the global admin stylesheet. Child pages should NOT import shared-admin.css directly.
+*/
 
+/* ------------------ SHARED ADMIN (from shared-admin.css) ------------------ */
 /* CONTENEDOR PRINCIPAL */
 .module-container {
     padding: 1.5rem;
@@ -40,19 +45,16 @@
 }
 
 /* Colores distintivos MINIMALISTAS por módulo */
-/* PRODUCTOS - Azul muy sutil */
 .module-header.products-module::before {
     background: #5dade2;
     opacity: 0.4;
 }
 
-/* CATEGORÍAS - Verde muy sutil */
 .module-header.categories-module::before {
     background: #52be80;
     opacity: 0.4;
 }
 
-/* ÓRDENES - Naranja muy sutil */
 .module-header.orders-module::before {
     background: #f8b739;
     opacity: 0.4;
@@ -133,12 +135,10 @@
     border-spacing: 0;
 }
 
-/* Header de tabla */
 .modern-table thead tr {
     background: #2c3e50;
 }
 
-/* NO gradientes llamativos */
 .products-module .modern-table thead tr {
     border-top: 2px solid #5dade2;
 }
@@ -548,3 +548,30 @@
         padding: 0.675rem 0.5rem;
     }
 }
+
+
+/* ------------------ PRODUCT / CATEGORY SPECIFIC ------------------ */
+/* Image product */
+.product-img,
+.category-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    transition: transform 0.2s ease;
+}
+
+.product-img:hover,
+.category-img:hover {
+    transform: scale(1.1);
+}
+
+/* Precio destacado (productos) */
+.product-price {
+    font-weight: 700;
+    color: #28a745;
+    font-size: 1.1rem;
+}
+
+/* End admin-styles.css */
