@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Store - Detalle de Producto</title>
+
+    <link rel="stylesheet" href="/src/styles/styles-unified.css">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        /* Page-specific small overrides can live here if needed */
+    </style>
+</head>
+<body>
+    <!-- Reuse the same navbar so the header remains visible -->
+    <header class="navbar">
+        <div class="navbar-brand">
+            <h1 class="store-name">🍕 Food Store</h1>
+        </div>
+        <div class="navbar-right">
+            <nav class="navbar-links">
+                <a href="/src/pages/client/index.html">Inicio</a>
+                <a href="/src/pages/client/orders/orders.html">Mis Pedidos</a>
+            </nav>
+            <div class="navbar-user">
+                <a href="/src/pages/store/cart/cart.html" class="cart-icon-link"><span class="cart-icon">🛒<sup class="cart-count">0</sup></span></a>
+                <span id="userInfo" class="user-name">Juan Pérez</span>
+                <div id="logoutContainer" class="logout-btn-container"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container main-content">
+        <section class="product-detail-page">
+            <div class="product-detail-grid">
+                <div class="product-image-card">
+                    <img src="/src/assets/sample-burger.jpg" alt="Hamburguesa triple" class="product-image">
+                </div>
+                <div class="product-info">
+                    <h1 class="pd-title">Hamburguesa triple</h1>
+                    <p class="pd-price">$25000.00</p>
+                    <span class="badge badge-available">Disponible (Stock: 30)</span>
+
+                    <p class="pd-desc">Hamburguesa triple smash</p>
+
+                    <div class="pd-quantity">
+                        <label>Cantidad:</label>
+                        <div class="qty-controls">
+                            <button class="btn btn-outline" id="qty-decrease">-</button>
+                            <input type="number" id="qty" value="1" min="1" class="qty-input">
+                            <button class="btn btn-outline" id="qty-increase">+</button>
+                        </div>
+                    </div>
+
+                    <div class="pd-actions">
+                        <button class="btn btn-primary btn-block" id="addToCart">Agregar al Carrito</button>
+                        <a href="/src/pages/client/index.html" class="btn btn-secondary">← Volver</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Small client-side helpers for the quantity controls (no external deps)
+        document.addEventListener('DOMContentLoaded', function(){
+            const dec = document.getElementById('qty-decrease');
+            const inc = document.getElementById('qty-increase');
+            const input = document.getElementById('qty');
+            dec && dec.addEventListener('click', () => { if (+input.value > 1) input.value = +input.value - 1; });
+            inc && inc.addEventListener('click', () => { input.value = +input.value + 1; });
+        });
+    </script>
+
+    <!-- Importar el script que maneja la lógica del detalle -->
+    <script type="module" src="./productDetail.ts"></script>
+</body>
+</html>

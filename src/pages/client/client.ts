@@ -113,18 +113,20 @@ function crearTarjetaProducto(producto: Producto): string {
         minimumFractionDigits: 2 
     }).format(producto.precio);
 
-    const statusClass = producto.disponible ? 'disponible' : 'agotado';
     const statusText = producto.disponible ? 'Disponible' : 'Agotado';
 
     return `
-        <div class="product-card">
-            <img 
-                src="${producto.imagen}" 
-                alt="${producto.nombre}" 
-                class="product-image"
-            />
+        <article class="product-card" data-product-id="${producto.id}">
+            <div class="product-image-container">
+                <img 
+                    src="${producto.imagen}" 
+                    alt="${producto.nombre}" 
+                    class="product-image"
+                    onerror="this.src='https://via.placeholder.com/300x200?text=Producto'"
+                />
+            </div>
             
-            <div class="product-info">
+            <div class="product-details">
                 <p class="product-category">${producto.categoria?.nombre || 'Sin Categoría'}</p>
                 
                 <h3 class="product-name">${producto.nombre}</h3>
@@ -134,17 +136,12 @@ function crearTarjetaProducto(producto: Producto): string {
                 <div class="product-footer">
                     <span class="product-price">${precioFormateado}</span>
                     
-                    <span class="product-status ${statusClass}">
+                    <button class="btn ${producto.disponible ? 'btn-available' : 'btn-sold-out'}">
                         ${statusText}
-                    </span>
-                    
-                    ${producto.disponible ? 
-                        '<button class="add-to-cart-btn">Agregar</button>' : 
-                        '<button class="add-to-cart-btn disabled" disabled>Ver más</button>'
-                    }
+                    </button>
                 </div>
             </div>
-        </div>
+        </article>
     `;
 }
 
@@ -184,8 +181,35 @@ async function renderizarProductos(): Promise<void> {
     // Generar e inyectar HTML
     const htmlProductos = productos.map(crearTarjetaProducto).join('');
     contenedorProductos.innerHTML = htmlProductos;
+
+    // Agregar event listeners a las tarjetas de productos
+    setupProductCardListeners();
 }
 
+
+/**
+ * 🖱️ Configura los event listeners para las tarjetas de productos
+ */
+function setupProductCardListeners(): void {
+    const productCards = document.querySelectorAll('.product-card');
+    
+    productCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            const productId = (card as HTMLElement).dataset.productId;
+            if (!productId) return;
+            
+            // Prevenir navegación si se hizo clic en un botón
+            const target = e.target as HTMLElement;
+            if (target.tagName === 'BUTTON') return;
+            
+            // Navegar al detalle del producto
+            window.location.href = `/src/pages/client/productDetail/productDetail.html?id=${productId}`;
+        });
+        
+        // Agregar efecto hover
+        card.classList.add('clickable');
+    });
+}
 
 // ============================================
 // 🚀 I N I C I A L I Z A C I Ó N
