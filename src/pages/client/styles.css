@@ -1,124 +1,353 @@
-/* ============================================
-   ESTILOS ESPECÍFICOS - Panel de Cliente
-   Solo estilos únicos de esta página
-   ============================================ */
-
-/* =========================
-   PERSONALIZACIÓN PARA CLIENTE
-   ========================= */
-body {
-  /* Gradiente específico para el panel de cliente */
-  background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
-  min-height: 100vh;
+/* ========================================= */
+/* NAVBAR   */
+/* ========================================= */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--bg-card);
+    border-bottom: var(--border-width) solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    position: sticky;
 }
 
-/* Header específico del cliente - fondo blanco */
-.header {
-  background: var(--color-white);
-  color: var(--color-gray-900);
-  box-shadow: var(--shadow);
+.navbar-brand h1.store-name {
+    font-size: var(--font-size-xl);
+    color: var(--color-primary);
+    margin: 0;
+    font-weight: var(--font-weight-bold);
 }
 
-.header h1 {
-  color: var(--color-gray-900);
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
 }
 
-.user-section {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
 }
 
-/* =========================
-   WELCOME CARD - Específico del cliente
-   ========================= */
-.welcome-card {
-  text-align: center;
-  margin-bottom: var(--spacing-xl);
+.navbar-links a {
+    text-decoration: none;
+    color: var(--color-gray-700);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    transition: all var(--transition-fast);
+    border-radius: var(--border-radius-sm);
 }
 
-.welcome-card .card-title {
-  font-size: var(--font-size-3xl);
-  margin-bottom: var(--spacing-md);
+.navbar-links a:hover {
+    color: var(--color-primary);
+    background-color: var(--color-gray-100);
 }
 
-.welcome-card p {
-  font-size: var(--font-size-lg);
-  color: var(--color-gray-600);
-  margin-bottom: var(--spacing-lg);
+.navbar-user {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-size: var(--font-size-sm);
+    /* border-left: var(--border-width) solid var(--border-color); */
+    /* padding-left: var(--spacing-lg); */
 }
 
-.nav-buttons {
-  display: flex;
-  gap: var(--spacing-md);
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: var(--spacing-lg);
+.cart-icon {
+    font-size: 14px; /* Tamaño consistente con el texto */
+    position: relative;
+    cursor: pointer;
+    color: #333;
 }
 
-/* =========================
-   CARDS GRID - Layout específico
-   ========================= */
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--spacing-lg);
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #dc3545;
+    color: white;
+    font-size: 9px;
+    border-radius: 50%;
+    padding: 1px 4px;
+    line-height: 1;
 }
 
-/* Personalización de cards para cliente */
-.cards-grid .card {
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
+/* Estilo para el enlace del usuario (el nombre) */
+.user-profile-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600; /* Hace que el nombre se vea más destacado */
 }
 
-.cards-grid .card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
+/* Estilo para el botón de Cerrar Sesión (creado por JS) */
+.logout-btn-container button {
+    /* Sobreescribir los estilos inline de auth.ts para que se vea como la imagen */
+    padding: 6px 12px !important; 
+    background-color: #f0f0f0 !important; /* Fondo gris claro */
+    color: #333 !important; /* Texto oscuro */
+    border: 1px solid #ccc !important; /* Borde gris sutil */
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    font-weight: 500 !important;
+    text-transform: none; /* No mayúsculas */
+    font-size: 14px !important;
+    transition: background-color 0.2s;
 }
 
-/* Icono grande en las cards */
-.icon {
-  font-size: var(--font-size-3xl);
-  margin-right: var(--spacing-sm);
+.logout-btn-container button:hover {
+    background-color: #e0e0e0 !important;
 }
 
-/* Estilo específico para los títulos con iconos */
-.card-title {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
+
+/* ========================================= */
+/* 3. BARRA DE BÚSQUEDA Y FILTROS            */
+/* ========================================= */
+.search-filter-bar {
+    display: flex;
+    gap: var(--spacing-md);
+    margin: var(--spacing-xl) 0;
+    background-color: var(--bg-card);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow);
+    align-items: center;
+    border: var(--border-width) solid var(--border-color);
 }
 
-/* =========================
-   BOTONES PERSONALIZADOS PARA CLIENTE
-   ========================= */
-.btn-primary {
-  /* Sobrescribir con el gradiente del cliente */
-  background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
-  border: none;
+.search-input-group {
+    flex-grow: 1;
+    position: relative;
 }
 
-.btn-primary:hover {
-  background: linear-gradient(135deg, #66a6ff 0%, #89f7fe 100%);
-  transform: translateY(-2px);
+.search-icon {
+    position: absolute;
+    left: var(--spacing-sm);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-gray-500);
 }
 
-/* =========================
-   RESPONSIVE - Ajustes específicos
-   ========================= */
-@media (max-width: 768px) {
-  .cards-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .nav-buttons {
-    flex-direction: column;
-  }
-  
-  .nav-buttons .btn {
+.search-input {
     width: 100%;
-  }
-  
-  .welcome-card .card-title {
+    padding: 10px 10px 10px 35px;
+    border: 1px solid #e0e0e0; /* Borde más claro */
+    border-radius: 5px;
+    font-size: 15px;
+}
+
+.filter-group select {
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 15px;
+    min-width: 120px; /* Ancho fijo para las listas desplegables */
+    appearance: none;
+    background: white url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 10px center;
+    background-size: 10px;
+    cursor: pointer;
+}
+
+
+/* ========================================= */
+/* 4. ENCABEZADO DE PRODUCTOS                */
+/* ========================================= */
+.products-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline; /* Alinea por la base del texto */
+    margin: 30px 0 20px 0;
+}
+
+.products-header h2 {
+    font-size: 26px; /* Ajuste sutil */
+    font-weight: 700;
+    color: #333;
+}
+
+.product-count {
+    color: #888;
+    font-size: 14px;
+    padding-right: 5px; /* Pequeño ajuste visual */
+}
+
+
+/* ========================================= */
+/* 5. TARJETA DE PRODUCTO (PRODUCT CARD)     */
+/* ========================================= */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-xl);
+}
+
+.product-card {
+    width: 280px;
+    background-color: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform var(--transition-base);
+    border: var(--border-width) solid var(--border-color);
+    cursor: pointer;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.product-image-container {
+    height: 180px; /* Altura ligeramente menor para replicar la imagen */
+    background-image: url('URL_DE_LA_IMAGEN_DE_HAMBURGUESA'); 
+    background-size: cover;
+    background-position: center;
+}
+
+.product-details {
+    padding: var(--spacing-md);
+}
+
+.product-category {
+    font-size: var(--font-size-xs);
+    color: var(--color-gray-600);
+    margin-bottom: var(--spacing-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.product-name {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-gray-900);
+}
+
+.product-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-700);
+    margin-bottom: var(--spacing-md);
+    line-height: var(--line-height-relaxed);
+}
+
+.product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--spacing-sm);
+    border-top: var(--border-width) solid var(--border-color);
+}
+
+.product-price {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+}
+
+.btn-available {
+    background-color: var(--color-success);
+    color: var(--color-white);
+    border: none;
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+    cursor: default;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-sm);
+    transition: background-color var(--transition-fast);
+}
+
+/* ========================================= */
+/* PRODUCT DETAIL PAGE                        */
+/* ========================================= */
+.product-detail-page {
+    padding-top: var(--spacing-2xl);
+    padding-bottom: var(--spacing-2xl);
+}
+
+.product-detail-grid {
+    display: grid;
+    grid-template-columns: 520px 1fr;
+    gap: var(--spacing-2xl);
+    align-items: start;
+}
+
+.product-image-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-image {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-lg);
+    object-fit: cover;
+}
+
+.product-info .pd-title {
+    font-size: var(--font-size-3xl);
+    margin: 0 0 var(--spacing-sm) 0;
+}
+
+.pd-price {
+    color: var(--color-primary);
     font-size: var(--font-size-2xl);
-  }
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--spacing-sm);
+}
+
+.badge-available {
+    display: inline-block;
+    background: var(--color-turquoise);
+    color: var(--color-white);
+    padding: 6px 10px;
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--spacing-md);
+}
+
+.pd-desc {
+    color: var(--color-gray-700);
+    margin: var(--spacing-md) 0;
+}
+
+.pd-quantity {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.qty-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.qty-input {
+    width: 60px;
+    text-align: center;
+    padding: 8px;
+    border-radius: var(--border-radius-sm);
+    border: var(--border-width) solid var(--border-color);
+}
+
+.pd-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+    margin-top: var(--spacing-lg);
+}
+
+@media (max-width: 900px) {
+    .product-detail-grid {
+        grid-template-columns: 1fr;
+    }
+    .product-image-card { order: 0 }
 }

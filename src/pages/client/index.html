@@ -3,95 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Cliente</title>
+    <title>Food Store - Todos los Productos</title> 
     
-    <!-- Estilos globales (unificados) -->
-    <link rel="stylesheet" href="../../styles/global.css">
-    
-    <!-- Estilos específicos de esta página -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/src/styles/styles-unified.css">
+
+    <link rel="stylesheet" href="styles.css"> 
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <h1>👤 Panel de Cliente</h1>
-            <div class="user-section">
-                <span id="userInfo"></span>
-                <div id="logoutContainer"></div>
+    <header class="navbar">
+        <div class="navbar-brand">
+            <h1 class="store-name">🍕 Food Store</h1>
+        </div>
+        <div class="navbar-right">
+            <nav class="navbar-links">
+                <a href="#">Inicio</a>
+                <a href="#">Mis Pedidos</a>
+                <a href="/src/pages/admin/adminHome/adminHome.html">Administración</a>
+            </nav>
+            <div class="navbar-user">
+                <span class="cart-icon">🛒 Carrito<sup class="cart-count">0</sup></span>
+                <span id="userInfo" class="user-name"></span>
+                <div id="logoutContainer" class="logout-btn-container"></div>
             </div>
         </div>
     </header>
 
-    <div class="container">
-        <div class="card welcome-card">
-            <h1 class="card-title">Bienvenido a tu Panel de Cliente</h1>
-            <p id="welcomeMessage">Aquí puedes gestionar tu perfil y servicios</p>
-            
-            <div class="nav-buttons">
-                <button class="btn btn-primary" onclick="window.location.href='/'">
-                    🏠 Página Principal
-                </button>
-                <button class="btn btn-primary" onclick="window.location.href='/src/pages/admin/adminHome/adminHome.html'">
-                    🛠️ Panel Admin
-                </button>
-            </div>
+    <div class="main-content">
+        <div class="header-productos">
+            <h2>Todos los Productos</h2>
+            <span id="product-count-span">Cargando...</span>
         </div>
-
-        <div class="cards-grid">
-            <div class="card">
-                <h2 class="card-title">
-                    <span class="icon">📊</span>
-                    Mis Estadísticas
-                </h2>
-                <p>Visualiza tus métricas y estadísticas personales.</p>
-                <button class="btn btn-primary">Ver Estadísticas</button>
+        
+        <div id="productos-container" class="products-grid">
             </div>
-
-            <div class="card">
-                <h2 class="card-title">
-                    <span class="icon">⚙️</span>
-                    Configuración
-                </h2>
-                <p>Personaliza tu cuenta y preferencias.</p>
-                <button class="btn btn-primary" id="settingsBtn">Configurar</button>
-            </div>
-
-            <div class="card">
-                <h2 class="card-title">
-                    <span class="icon">📧</span>
-                    Mensajes
-                </h2>
-                <p>Revisa tus mensajes y notificaciones.</p>
-                <button class="btn btn-primary">Ver Mensajes</button>
-            </div>
-
-            <div class="card">
-                <h2 class="card-title">
-                    <span class="icon">💳</span>
-                    Servicios
-                </h2>
-                <p>Administra tus servicios contratados.</p>
-                <button class="btn btn-primary">Gestionar</button>
-            </div>
-
-            <div class="card">
-                <h2 class="card-title">
-                    <span class="icon">📝</span>
-                    Documentos
-                </h2>
-                <p>Accede a tus documentos y archivos.</p>
-                <button class="btn btn-primary">Ver Documentos</button>
-            </div>
-
-            <div class="card">
-                <h2 class="card-title">
-                    <span class="icon">❓</span>
-                    Ayuda
-                </h2>
-                <p>¿Necesitas ayuda? Consulta nuestras guías.</p>
-                <button class="btn btn-primary">Obtener Ayuda</button>
-            </div>
-        </div>
     </div>
 
     <script type="module" src="./client.ts"></script>
