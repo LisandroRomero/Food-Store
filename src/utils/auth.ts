@@ -176,6 +176,41 @@ export function crearBotonCerrarSesion(idContenedor: string): void {
   }
 }
 
+// ===========================================
+// 🛒 Lógica para actualizar el contador del carrito
+// ===========================================
+
+/**
+ * 🔢 Calcula el número total de artículos en el carrito (contando cantidades)
+ * y actualiza el elemento <sup> en el navbar.
+ */
+export function actualizarContadorCarrito(): void {
+    const cartCountElement = document.querySelector('.cart-count');
+    
+    if (!cartCountElement) return;
+
+    try {
+        const cartJson = localStorage.getItem('cart');
+        const cart: Array<{ cantidad: number }> = cartJson ? JSON.parse(cartJson) : [];
+        
+        let totalItems = 0;
+        
+        // Suma la cantidad de cada producto
+        cart.forEach(item => {
+            totalItems += item.cantidad;
+        });
+        
+        cartCountElement.textContent = totalItems.toString();
+
+    } catch (e) {
+        console.error("Error al actualizar contador del carrito:", e);
+        cartCountElement.textContent = '0';
+    }
+}
+
+
+
+
 // ============================================
 // 📝 EJEMPLO DE USO
 // ============================================

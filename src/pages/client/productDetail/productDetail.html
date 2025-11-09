@@ -9,10 +9,45 @@
     <link rel="stylesheet" href="../styles.css">
     <style>
         /* Page-specific small overrides can live here if needed */
+        .product-detail-card {
+            display: flex;
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 2rem auto;
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+        .pd-image {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+        .product-image {
+            width: 100%;
+            height: auto;
+            border-radius: var(--border-radius-lg);
+            object-fit: cover;
+        }
+        .product-info {
+            flex: 2;
+        }
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .qty-input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            padding: 0.5rem;
+        }
     </style>
 </head>
 <body>
-    <!-- Reuse the same navbar so the header remains visible -->
     <header class="navbar">
         <div class="navbar-brand">
             <h1 class="store-name">🍕 Food Store</h1>
@@ -23,54 +58,29 @@
                 <a href="/src/pages/client/orders/orders.html">Mis Pedidos</a>
             </nav>
             <div class="navbar-user">
-                <a href="/src/pages/store/cart/cart.html" class="cart-icon-link"><span class="cart-icon">🛒<sup class="cart-count">0</sup></span></a>
+                <a href="/src/pages/client/cart/cart.html" class="cart-icon-link">
+                    <span class="cart-icon">🛒 Carrito<sup class="cart-count">0</sup></span>
+                </a>
                 <span id="userInfo" class="user-name">Juan Pérez</span>
                 <div id="logoutContainer" class="logout-btn-container"></div>
             </div>
         </div>
     </header>
 
-    <main class="container main-content">
-        <section class="product-detail-page">
-            <div class="product-detail-grid">
-                <div class="product-image-card">
-                    <img src="/src/assets/sample-burger.jpg" alt="Hamburguesa triple" class="product-image">
-                </div>
-                <div class="product-info">
-                    <h1 class="pd-title">Hamburguesa triple</h1>
-                    <p class="pd-price">$25000.00</p>
-                    <span class="badge badge-available">Disponible (Stock: 30)</span>
-
-                    <p class="pd-desc">Hamburguesa triple smash</p>
-
-                    <div class="pd-quantity">
-                        <label>Cantidad:</label>
-                        <div class="qty-controls">
-                            <button class="btn btn-outline" id="qty-decrease">-</button>
-                            <input type="number" id="qty" value="1" min="1" class="qty-input">
-                            <button class="btn btn-outline" id="qty-increase">+</button>
-                        </div>
-                    </div>
-
-                    <div class="pd-actions">
-                        <button class="btn btn-primary btn-block" id="addToCart">Agregar al Carrito</button>
-                        <a href="/src/pages/client/index.html" class="btn btn-secondary">← Volver</a>
-                    </div>
-                </div>
+    <main class="main-content">
+        <section class="product-detail-section">
+            <div id="product-detail-container" class="product-detail-card">
+                <!-- El contenido se renderiza aquí por productDetail.ts -->
+                <p>Cargando producto...</p>
             </div>
         </section>
+        
+        <!-- Contenedor para mensajes de éxito/error del TS -->
+        <div id="message-container" style="text-align: center; margin-top: 1rem;">
+            <!-- Este div es usado por productDetail.ts para mostrar mensajes -->
+            <div id="success-message" class="message success" style="display:none; max-width: 400px; margin: 0 auto;"></div>
+        </div>
     </main>
-
-    <script>
-        // Small client-side helpers for the quantity controls (no external deps)
-        document.addEventListener('DOMContentLoaded', function(){
-            const dec = document.getElementById('qty-decrease');
-            const inc = document.getElementById('qty-increase');
-            const input = document.getElementById('qty');
-            dec && dec.addEventListener('click', () => { if (+input.value > 1) input.value = +input.value - 1; });
-            inc && inc.addEventListener('click', () => { input.value = +input.value + 1; });
-        });
-    </script>
 
     <!-- Importar el script que maneja la lógica del detalle -->
     <script type="module" src="./productDetail.ts"></script>

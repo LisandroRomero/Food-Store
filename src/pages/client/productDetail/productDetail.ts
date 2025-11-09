@@ -1,7 +1,99 @@
 // productDetail.ts
-import { protegerPagina, mostrarInfoUsuario, crearBotonCerrarSesion } from '../../../utils/auth';
+// Se asume que '../../../utils/auth' provee las funciones de autenticación y el contador.
+// Ahora importamos 'actualizarContadorCarrito' correctamente.
+import { protegerPagina, mostrarInfoUsuario, crearBotonCerrarSesion, actualizarContadorCarrito } from '../../../utils/auth';
 import { productsService } from '../../../utils/services/products.service';
 import type { IProduct } from '../../../types/IProduct';
+
+// ============================================
+// 📦 I N T E R F A C E S   D E L   C A R R I T O
+// ============================================
+
+/**
+ * Representa un artículo dentro del carrito de compras.
+ */
+interface CartItem {
+    id: number;
+    nombre: string;
+    precio: number;
+    cantidad: number;
+    imagen: string;
+}
+
+// ============================================
+// 🛍️ L Ó G I C A   D E   C A R R I T O
+// ============================================
+
+/**
+ * 💾 Carga los artículos del carrito desde localStorage.
+ * @returns Array de CartItem o un array vacío si no hay datos.
+ */
+function loadCart(): CartItem[] {
+    try {
+        const cartJson = localStorage.getItem('cart');
+        return cartJson ? JSON.parse(cartJson) : [];
+    } catch (e) {
+        console.error("Error al cargar el carrito de localStorage:", e);
+        return [];
+    }
+}
+
+/**
+ * 💾 Guarda los artículos del carrito en localStorage.
+ * @param cart Array de CartItem a guardar.
+ */
+function saveCart(cart: CartItem[]): void {
+    try {
+        localStorage.setItem('cart', JSON.stringify(cart));
+        // Llama a la función global para actualizar el contador
+        actualizarContadorCarrito(); 
+    } catch (e) {
+        console.error("Error al guardar el carrito en localStorage:", e);
+    }
+}
+
+/**
+ * 🛒 Agrega o actualiza un producto en el carrito.
+ * @param producto El producto base.
+ * @param cantidad La cantidad a añadir.
+ */
+function addItemToCart(producto: IProduct, cantidad: number): void {
+    let cart = loadCart();
+    const existingItemIndex = cart.findIndex(item => item.id === producto.id);
+
+    if (existingItemIndex > -1) {
+        // El producto ya existe, actualiza la cantidad
+        cart[existingItemIndex].cantidad += cantidad;
+    } else {
+        // Nuevo producto, agrégalo
+        const newItem: CartItem = {
+            id: producto.id,
+            nombre: producto.nombre,
+            precio: producto.precio,
+            cantidad: cantidad,
+            imagen: producto.imagen || '/assets/default-food.png' // Usar imagen o fallback
+        };
+        cart.push(newItem);
+    }
+
+    // Asegurar que la cantidad mínima sea 1 si se reduce o se añade de forma incorrecta
+    cart = cart.filter(item => item.cantidad > 0);
+    
+    saveCart(cart);
+    
+    // Muestra un mensaje amigable
+    const successMsg = document.getElementById('success-message');
+    if (successMsg) {
+        successMsg.textContent = `✅ ${cantidad} x ${producto.nombre} agregado al carrito.`;
+        successMsg.style.display = 'block';
+        successMsg.classList.remove('error');
+        successMsg.classList.add('success');
+        setTimeout(() => successMsg.style.display = 'none', 3000);
+    } else {
+         console.log(`✅ Producto agregado al carrito: ${cantidad} x ${producto.nombre}`);
+    }
+}
+
 
 // ============================================
 // 🛍️ L Ó G I C A   D E   P R O D U C T O S
@@ -12,7 +104,9 @@ import type { IProduct } from '../../../types/IProduct';
  */
 async function obtenerDetalleProducto(id: string): Promise<IProduct | null> {
     try {
-        const response = await productsService.getProductos();
+        // Simulación: Si no tienes un servicio real, asegúrate de que productsService.getProductos()
+        // devuelve un objeto con la estructura { success: boolean, data: IProduct[] }.
+        const response = await productsService.getProductos(); 
         if (!response.success) {
             throw new Error(response.message || 'Error al obtener productos');
         }
@@ -38,97 +132,100 @@ async function renderizarDetalleProducto(): Promise<void> {
     // Obtener el ID del producto de la URL
     const params = new URLSearchParams(window.location.search);
     const productId = params.get('id');
-    
+
+    const container = document.getElementById('product-detail-container');
+    if (!container) return;
+
     if (!productId) {
-        window.location.href = '/src/pages/client/index.html';
+        container.innerHTML = '<p class="message error">❌ Error: ID de producto no especificado.</p>';
         return;
     }
-    
+
     const producto = await obtenerDetalleProducto(productId);
     
     if (!producto) {
-        alert('Producto no encontrado');
-        window.location.href = '/src/pages/client/index.html';
+        container.innerHTML = `<p class="message error">❌ Error: Producto con ID ${productId} no encontrado o servicio falló.</p>`;
         return;
     }
+
+    // Generar el HTML
+    const html = `
+        <div class="pd-image">
+            <img 
+                src="${producto.imagen || '/assets/default-food.png'}" 
+                alt="${producto.nombre}" 
+                class="product-image"
+                onerror="this.onerror=null; this.src='/assets/default-food.png';">
+        </div>
+        <div class="product-info">
+            <h2 class="pd-title">${producto.nombre}</h2>
+            <p class="pd-price">$${producto.precio.toFixed(2)}</p>
+            <span class="badge-available ${producto.stock > 0 ? '' : 'badge-disabled'}">
+                ${producto.stock > 0 ? 'Disponible' : 'Sin Stock'}
+            </span>
+            
+            <p class="pd-desc">${producto.descripcion}</p>
+            
+            <div class="pd-quantity">
+                <label for="qty" class="qty-label">Cantidad:</label>
+                <div class="qty-controls">
+                    <button class="btn btn-outline" id="qty-decrease" ${producto.stock === 0 ? 'disabled' : ''}>-</button>
+                    <input type="number" id="qty" value="1" min="1" max="${producto.stock}" class="qty-input" ${producto.stock === 0 ? 'disabled' : ''}>
+                    <button class="btn btn-outline" id="qty-increase" ${producto.stock === 0 ? 'disabled' : ''}>+</button>
+                </div>
+            </div>
+
+            <div class="pd-actions">
+                <button class="btn btn-primary btn-block" id="addToCart" ${producto.stock === 0 ? 'disabled' : ''}>
+                    ${producto.stock === 0 ? 'Sin Stock' : 'Agregar al Carrito'}
+                </button>
+                <a href="/src/pages/client/index.html" class="btn btn-secondary">← Volver</a>
+            </div>
+        </div>
+    `;
+
+    container.innerHTML = html;
     
-    // Formatear el precio
-    const precioFormateado = new Intl.NumberFormat('es-CO', {
-        style: 'currency',
-        currency: 'COP',
-        minimumFractionDigits: 2
-    }).format(producto.precio);
-    
-    // Actualizar el título de la página
-    document.title = `${producto.nombre} - Food Store`;
-    
-    // Actualizar el contenido
-    const titleElement = document.querySelector('.pd-title');
-    const priceElement = document.querySelector('.pd-price');
-    const descElement = document.querySelector('.pd-desc');
-    const badgeElement = document.querySelector('.badge-available');
-    const imgElement = document.querySelector('.product-image') as HTMLImageElement;
-    
-    if (titleElement) titleElement.textContent = producto.nombre;
-    if (priceElement) priceElement.textContent = precioFormateado;
-    if (descElement) descElement.textContent = producto.descripcion;
-    if (badgeElement) {
-        badgeElement.textContent = producto.disponible ? 
-            `Disponible (Stock: ${producto.stock})` : 'Agotado';
-        badgeElement.className = `badge ${producto.disponible ? 'badge-available' : 'badge-sold-out'}`;
-    }
-    
-    // Actualizar la imagen
-    if (imgElement) {
-        imgElement.src = producto.imagen || 'https://via.placeholder.com/400x300?text=Producto';
-        imgElement.alt = producto.nombre;
-    }
-    
-    // Configurar los botones de cantidad y agregar al carrito
+    // Configurar la lógica de cantidad y carrito después de renderizar
     setupQuantityControls(producto.stock);
     setupAddToCart(producto);
 }
 
 /**
- * ➕ Configura los controles de cantidad
+ * 🔢 Configura los controles de cantidad con el stock máximo.
  */
 function setupQuantityControls(maxStock: number): void {
-    const qtyInput = document.getElementById('qty') as HTMLInputElement;
-    const decreaseBtn = document.getElementById('qty-decrease') as HTMLButtonElement;
-    const increaseBtn = document.getElementById('qty-increase') as HTMLButtonElement;
-    const addToCartBtn = document.getElementById('addToCart') as HTMLButtonElement;
+    const dec = document.getElementById('qty-decrease');
+    const inc = document.getElementById('qty-increase');
+    const input = document.getElementById('qty') as HTMLInputElement;
+
+    if (!dec || !inc || !input) return;
     
-    if (!qtyInput || !decreaseBtn || !increaseBtn || !addToCartBtn) return;
-    
-    // Deshabilitar el botón de agregar si no hay stock
-    if (maxStock <= 0) {
-        addToCartBtn.disabled = true;
-        addToCartBtn.textContent = 'Sin Stock';
-        qtyInput.disabled = true;
-        decreaseBtn.disabled = true;
-        increaseBtn.disabled = true;
-        return;
-    }
-    
-    decreaseBtn.addEventListener('click', () => {
-        const currentValue = parseInt(qtyInput.value);
-        if (currentValue > 1) {
-            qtyInput.value = (currentValue - 1).toString();
+    // Si no hay stock, los botones ya están deshabilitados en el HTML generado
+    if (maxStock === 0) return; 
+
+    // Disminuir cantidad
+    dec.addEventListener('click', () => { 
+        let value = parseInt(input.value);
+        if (value > 1) {
+            input.value = (value - 1).toString();
+        }
+    });
+
+    // Aumentar cantidad
+    inc.addEventListener('click', () => { 
+        let value = parseInt(input.value);
+        if (value < maxStock) {
+            input.value = (value + 1).toString();
         }
     });
     
-    increaseBtn.addEventListener('click', () => {
-        const currentValue = parseInt(qtyInput.value);
-        if (currentValue < maxStock) {
-            qtyInput.value = (currentValue + 1).toString();
-        }
-    });
-    
-    qtyInput.addEventListener('change', () => {
-        let value = parseInt(qtyInput.value);
+    // Validación de entrada manual
+    input.addEventListener('change', () => {
+        let value = parseInt(input.value);
         if (isNaN(value) || value < 1) value = 1;
         if (value > maxStock) value = maxStock;
-        qtyInput.value = value.toString();
+        input.value = value.toString();
     });
 }
 
@@ -143,15 +240,23 @@ function setupAddToCart(producto: IProduct): void {
     
     addToCartBtn.addEventListener('click', () => {
         const cantidad = parseInt(qtyInput.value);
-        // TODO: Implementar lógica real del carrito
-        console.log('Agregando al carrito:', {
-            productoId: producto.id,
-            nombre: producto.nombre,
-            cantidad,
-            precio: producto.precio
-        });
-        
-        alert(`Producto agregado al carrito: ${cantidad} x ${producto.nombre}`);
+        if (cantidad > 0 && cantidad <= producto.stock) {
+            addItemToCart(producto, cantidad);
+        } else {
+            // Muestra un mensaje amigable de error
+            const errorMsg = document.getElementById('success-message');
+            if (errorMsg) {
+                errorMsg.textContent = `❌ La cantidad debe estar entre 1 y ${producto.stock}.`;
+                errorMsg.style.display = 'block';
+                errorMsg.classList.remove('success');
+                errorMsg.classList.add('error');
+                setTimeout(() => {
+                    errorMsg.style.display = 'none';
+                    errorMsg.classList.remove('error');
+                    errorMsg.classList.add('success');
+                }, 3000);
+            }
+        }
     });
 }
 
@@ -169,7 +274,9 @@ function main(): void {
     
     // Cargar detalles del producto
     renderizarDetalleProducto();
+
+    // Iniciar contador del carrito
+    actualizarContadorCarrito();
 }
 
-// Iniciar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', main);

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Store - Carrito de Compras</title>
+
+    <link rel="stylesheet" href="/src/styles/styles-unified.css">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="navbar-brand">
+            <h1 class="store-name">🍕 Food Store</h1>
+        </div>
+        <div class="navbar-right">
+            <nav class="navbar-links">
+                <a href="/src/pages/client/index.html">Inicio</a>
+                <a href="/src/pages/client/orders/orders.html">Mis Pedidos</a>
+            </nav>
+            <div class="navbar-user">
+                <!-- La ruta del carrito se ajusta en index.html y productDetail.html -->
+                <a href="/src/pages/client/cart/cart.html" class="cart-icon-link">
+                    <span class="cart-icon">🛒<sup class="cart-count">0</sup></span>
+                </a>
+                <span id="userInfo" class="user-name"></span>
+                <div id="logoutContainer" class="logout-btn-container"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="cart-section">
+            <h2 class="page-title">🛒 Mi Carrito de Compras</h2>
+            <div class="cart-container">
+                
+                <!-- Columna de Artículos del Carrito -->
+                <div class="cart-items-list-container">
+                    <div id="cart-message" class="message info" style="display: none;">
+                        Tu carrito está vacío. ¡Añade algunos productos!
+                    </div>
+                    <div id="cart-items-list">
+                        <!-- Aquí se renderizarán los productos del carrito (por cart.ts) -->
+                    </div>
+                </div>
+
+                <!-- Columna de Resumen del Carrito -->
+                <div class="cart-summary card">
+                    <h3 class="summary-title">Resumen de la Compra</h3>
+                    
+                    <div class="summary-line">
+                        <span>Subtotal (<span id="total-items">0</span> artículos):</span>
+                        <span id="subtotal">$0.00</span>
+                    </div>
+
+                    <div class="summary-line total-line">
+                        <span>Total:</span>
+                        <span id="total-final">$0.00</span>
+                    </div>
+
+                    <button id="checkout-btn" class="btn btn-primary btn-block" disabled>
+                        Finalizar Compra
+                    </button>
+                    <button id="clear-cart-btn" class="btn btn-secondary btn-block">
+                        Vaciar Carrito
+                    </button>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Importar la lógica del carrito -->
+    <script type="module" src="./cart.ts"></script>
+</body>
+</html>

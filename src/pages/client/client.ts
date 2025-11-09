@@ -1,3 +1,5 @@
+import { actualizarContadorCarrito } from '../../utils/auth';
+
 // ============================================
 // 📦 I N T E R F A C E S / T Y P E S
 // ============================================
@@ -233,6 +235,7 @@ function main(): void {
     // 2. Iniciar la carga de productos (siempre se ejecuta, esté o no logueado)
     // Se ejecuta sólo cuando el DOM está completamente cargado
     document.addEventListener('DOMContentLoaded', renderizarProductos);
+    actualizarContadorCarrito();
 
     console.log('✅ Panel de cliente inicializado.');
     console.log('Usuario:', sesion);

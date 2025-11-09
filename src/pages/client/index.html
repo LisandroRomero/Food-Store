@@ -20,7 +20,9 @@
                 <a href="/src/pages/client/orders/orders.html">Mis Pedidos</a>
             </nav>
             <div class="navbar-user">
-                <a href="/src/pages/store/cart/cart.html" class="cart-icon-link"><span class="cart-icon">🛒 Carrito<sup class="cart-count">0</sup></span></a>
+                <a href="/src/pages/client/cart/cart.html" class="cart-icon-link">
+                    <span class="cart-icon">🛒 Carrito<sup class="cart-count">0</sup></span>
+                </a>
                 <span id="userInfo" class="user-name"></span>
                 <div id="logoutContainer" class="logout-btn-container"></div>
             </div>
@@ -30,13 +32,14 @@
     <div class="main-content">
         <div class="header-productos">
             <h2>Todos los Productos</h2>
-            <span id="product-count-span">Cargando...</span>
+            <span id="product-count-span" class="product-count-info"></span>
         </div>
         
         <div id="productos-container" class="products-grid">
             </div>
     </div>
 
+    <!-- Importar el script que maneja la lógica de la página principal -->
     <script type="module" src="./client.ts"></script>
 </body>
 </html>
