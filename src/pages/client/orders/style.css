@@ -1,0 +1,169 @@
+/* 1. Estilos Generales y Contenedor */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f0f4f8;
+    padding: 40px 20px;
+    margin: 0;
+}
+
+#orders-container {
+    display: grid;
+    gap: 20px; /* Espacio entre las tarjetas */
+    max-width: 800px;
+    margin: 0 auto; /* Centrar el contenedor */
+}
+
+/* 2. Estilo de la Tarjeta de Pedido */
+.order-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: transform 0.2s;
+}
+
+.order-card:hover {
+    transform: translateY(-3px); /* Efecto hover sutil */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 3. Encabezado y Estado */
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.order-id {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333333;
+}
+
+.status-tag {
+    /* Estilos base que serán sobrescritos por la lógica de TS/JS */
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+/* 4. Detalles de Fecha y Separadores */
+.order-date {
+    display: flex;
+    align-items: center;
+    font-size: 0.9em;
+    color: #666666;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.icon {
+    margin-right: 8px;
+    color: #666666;
+}
+
+/* 5. Contenido (Productos) */
+.order-content {
+    padding: 15px 0;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.product-item {
+    font-size: 1em;
+    color: #333333;
+    margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.product-item strong {
+    font-weight: normal; 
+}
+
+/* 6. Pie de Página (Total) */
+.order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+}
+
+.item-count {
+    display: flex;
+    align-items: center;
+    font-size: 1em;
+    color: #333333;
+}
+
+.total-price {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #d00000; /* Color rojo para el total */
+}
+
+/* Mensaje de carga */
+#loading {
+    text-align: center;
+    font-size: 1.2em;
+    color: #666;
+}
+
+
+/* ========================================= */
+/* NAVBAR   */
+/* ========================================= */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--bg-card);
+    border-bottom: var(--border-width) solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+}
+
+.navbar-brand h1.store-name {
+    font-size: var(--font-size-xl);
+    color: var(--color-primary);
+    margin: 0;
+    font-weight: var(--font-weight-bold);
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.navbar-links a {
+    text-decoration: none;
+    color: var(--color-gray-700);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    transition: all var(--transition-fast);
+    border-radius: var(--border-radius-sm);
+}
+
+.navbar-links a:hover {
+    color: var(--color-primary);
+    background-color: var(--color-gray-100);
+}
+
+.navbar-user {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-size: var(--font-size-sm);
+    /* border-left: var(--border-width) solid var(--border-color); */
+    /* padding-left: var(--spacing-lg); */
+}
