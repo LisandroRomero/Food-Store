@@ -7,6 +7,156 @@
 
     <link rel="stylesheet" href="/src/styles/styles-unified.css">
     <link rel="stylesheet" href="../styles.css">
+    
+    <style>
+        /* Estilos de Layout Principal */
+        .main-content {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .cart-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* Artículos (2 partes) y Resumen (1 parte) */
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .page-title {
+            color: var(--color-primary, #e74c3c); /* Asumiendo una variable de color */
+            margin-bottom: 20px;
+            font-size: 2em;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* Estilos del Artículo Individual (cart-item) */
+        .cart-item {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-right: 15px;
+        }
+
+        .cart-item-info {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .cart-item-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: var(--color-text-dark, #333);
+            text-decoration: none;
+        }
+        
+        .cart-item-title:hover {
+            text-decoration: underline;
+        }
+
+        .cart-item-price {
+            color: #777;
+            font-size: 0.9em;
+        }
+
+        .cart-item-total {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: var(--color-primary, #e74c3c);
+            margin-left: 20px;
+            width: 80px; /* Para alinear los totales */
+            text-align: right;
+        }
+
+        /* Controles de Cantidad (qty-controls) */
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 8px;
+        }
+
+        /* Estilos del Resumen (cart-summary) */
+        .cart-summary {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .summary-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            color: #333;
+        }
+
+        .summary-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .total-line {
+            font-weight: bold;
+            font-size: 1.3em;
+            color: var(--color-primary, #e74c3c);
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        
+        /* Botones generales */
+        .btn-block {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px 15px;
+            font-size: 1.1em;
+            cursor: pointer;
+        }
+        
+        /* Media Query para pantallas pequeñas */
+        @media (max-width: 768px) {
+            .cart-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .cart-item {
+                flex-wrap: wrap;
+            }
+            
+            .cart-item-info {
+                width: 100%;
+                margin-top: 10px;
+            }
+            
+            .cart-item-total {
+                width: auto;
+                margin-top: 10px;
+                text-align: left;
+            }
+        }
+    </style>
 </head>
 <body>
     <header class="navbar">
@@ -19,7 +169,6 @@
                 <a href="/src/pages/client/orders/orders.html">Mis Pedidos</a>
             </nav>
             <div class="navbar-user">
-                <!-- La ruta del carrito se ajusta en index.html y productDetail.html -->
                 <a href="/src/pages/client/cart/cart.html" class="cart-icon-link">
                     <span class="cart-icon">🛒<sup class="cart-count">0</sup></span>
                 </a>
@@ -34,17 +183,14 @@
             <h2 class="page-title">🛒 Mi Carrito de Compras</h2>
             <div class="cart-container">
                 
-                <!-- Columna de Artículos del Carrito -->
                 <div class="cart-items-list-container">
                     <div id="cart-message" class="message info" style="display: none;">
                         Tu carrito está vacío. ¡Añade algunos productos!
                     </div>
                     <div id="cart-items-list">
-                        <!-- Aquí se renderizarán los productos del carrito (por cart.ts) -->
-                    </div>
+                        </div>
                 </div>
 
-                <!-- Columna de Resumen del Carrito -->
                 <div class="cart-summary card">
                     <h3 class="summary-title">Resumen de la Compra</h3>
                     
@@ -70,7 +216,6 @@
         </section>
     </main>
 
-    <!-- Importar la lógica del carrito -->
     <script type="module" src="./cart.ts"></script>
 </body>
 </html>

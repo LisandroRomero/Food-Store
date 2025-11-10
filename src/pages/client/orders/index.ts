@@ -1,7 +1,11 @@
 // 1. DEFINICIÓN DE TIPOS/INTERFACES para la estructura del JSON
-// Esto es el corazón de TypeScript: asegurar que los datos tengan el formato esperado.
 
-import { obtenerSesion } from "../../../utils/auth";
+// Importamos las funciones necesarias de 'auth' para manejar la sesión y la UI
+import { 
+    obtenerSesion, 
+    mostrarInfoUsuario, 
+    crearBotonCerrarSesion 
+} from "../../../utils/auth"; // <--- Importaciones añadidas
 
 interface Producto {
     id: number;
@@ -43,35 +47,14 @@ interface Pedido {
 }
 
 
-// 2. MOCK DE DATOS (Simula la respuesta del endpoint)
-// Se han agregado productos diferentes para el pedido 3 para un mejor ejemplo.
-const mockResponse: Pedido[] = [
-    {
-        "id": 1, "fecha": [2025, 11, 8], "estado": "PENDIENTE", "total": 1250.0,
-        "usuario": { "id": 2, "nombre": "Juan", "apellido": "Pérez", "email": "juan@mail.com", "rol": "USUARIO" },
-        "detalles": [{ "id": 1, "cantidad": 10, "subtotal": 1250.0, "producto": { "id": 1, "nombre": "Coca Cola zero", "descripcion": "Refresco de cola sin azucar", "precio": 500.0, "stock": 0, "disponible": true, "imagen": "", "categoria": { "id": 1, "nombre": "Bebidas Frías" }, "activo": true } }]
-    },
-    {
-        "id": 2, "fecha": [2025, 11, 8], "estado": "PENDIENTE", "total": 2450.0,
-        "usuario": { "id": 2, "nombre": "Juan", "apellido": "Pérez", "email": "juan@mail.com", "rol": "USUARIO" },
-        "detalles": [{ "id": 2, "cantidad": 5, "subtotal": 2450.0, "producto": { "id": 2, "nombre": "Hamburguesa Sencilla", "descripcion": "Clásica Hamburguesa", "precio": 490.0, "stock": 100, "disponible": true, "imagen": "", "categoria": { "id": 2, "nombre": "Comidas" }, "activo": true } }]
-    },
-    {
-        "id": 3, "fecha": [2025, 10, 25], "estado": "COMPLETADO", "total": 1000.0,
-        "usuario": { "id": 2, "nombre": "Juan", "apellido": "Pérez", "email": "juan@mail.com", "rol": "USUARIO" },
-        "detalles": [
-            { "id": 3, "cantidad": 1, "subtotal": 600.0, "producto": { "id": 3, "nombre": "Hamburguesa Triple", "descripcion": "La de la foto original", "precio": 600.0, "stock": 50, "disponible": true, "imagen": "", "categoria": { "id": 2, "nombre": "Comidas" }, "activo": true } },
-            { "id": 4, "cantidad": 2, "subtotal": 400.0, "producto": { "id": 4, "nombre": "Papas Fritas", "descripcion": "Porción individual", "precio": 200.0, "stock": 200, "disponible": true, "imagen": "", "categoria": { "id": 3, "nombre": "Acompañamientos" }, "activo": true } }
-        ]
-    }
-];
-
 // 3. FUNCIONES DE UTILIDAD
+// ... (Formatos y estilos omitidos por brevedad)
 
 /**
  * Formatea la fecha del array [año, mes, día] a un string legible.
  */
 function formatDate(dateArray: Pedido['fecha']): string {
+// ... (cuerpo de la función)
     const [year, month, day] = dateArray;
     // El mes en JS es 0-indexado, por eso se resta 1.
     const date = new Date(year, month - 1, day);
@@ -233,6 +216,14 @@ async function fetchOrders(): Promise<void> {
 
 // 5. INICIALIZACIÓN
 document.addEventListener('DOMContentLoaded', () => {
-    // ✨ SOLUCIÓN: Llama a la función async DENTRO de un callback síncrono.
+    // 1. Configuración de la Navbar/Usuario
+    const sesion = obtenerSesion();
+
+    if (sesion) {
+        mostrarInfoUsuario('userInfo'); // <--- Función agregada
+        crearBotonCerrarSesion('logoutContainer'); // <--- Función agregada
+    }
+    
+    // 2. Carga de Pedidos
     fetchOrders(); 
 });

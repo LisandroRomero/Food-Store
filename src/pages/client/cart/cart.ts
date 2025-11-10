@@ -1,6 +1,5 @@
 // cart.ts
-import { protegerPagina, mostrarInfoUsuario, crearBotonCerrarSesion, actualizarContadorCarrito } from '../../../utils/auth';
-
+import { protegerPagina, mostrarInfoUsuario, crearBotonCerrarSesion, actualizarContadorCarrito, } from '../../../utils/auth';
 // ============================================
 // 📦 I N T E R F A C E S   D E L   C A R R I T O
 // ============================================
@@ -179,12 +178,57 @@ function clearCart(): void {
     const isConfirmed = window.confirm("¿Estás seguro de que quieres vaciar el carrito?");
     if (isConfirmed) {
         localStorage.removeItem('cart');
-        // Usar console.log en lugar de alert/confirm para el mensaje de éxito
         console.log("El carrito ha sido vaciado.");
         actualizarContadorCarrito();
         renderizarCarrito();
     }
 }
+
+/**
+ * 🛒 Lógica para procesar la compra y borrar el carrito si es exitosa.
+ */
+async function handleCheckout(): Promise<void> {
+    const checkoutBtn = document.getElementById('checkout-btn') as HTMLButtonElement;
+    if (checkoutBtn) checkoutBtn.disabled = true; // Deshabilitar botón para evitar doble click
+    
+    console.log("🚀 Iniciando proceso de Finalizar Compra...");
+    
+    try {
+        const result = await sendCart();
+        
+        // Verificar si sendCart retornó un objeto de éxito/falla
+        if (result && result.success === false) {
+             // Falla del servidor (API)
+             alert(`Error al procesar el pedido: ${result.message || 'Error desconocido'}`);
+             console.error('Fallo en el servidor:', result);
+        } else if (result) {
+            // Asumiendo éxito: el servidor devolvió una respuesta JSON válida
+            alert(`✅ ¡Pedido procesado con éxito! ID de Pedido: ${result.idPedido || 'N/A'}`);
+            console.log('Respuesta del servidor:', result);
+            
+            // ACCIÓN SOLICITADA: Vaciar carrito tras la compra exitosa
+            localStorage.removeItem('cart');
+            
+            actualizarContadorCarrito();
+            renderizarCarrito(); // Esto actualizará la UI para mostrar el carrito vacío
+        } else {
+            // Error inesperado o resultado nulo
+            alert('Ocurrió un error inesperado al procesar la respuesta. Intenta de nuevo.');
+        }
+    } catch (error) {
+        // Error de red (fetch fallido) o excepción dentro de sendCart
+        alert('Ocurrió un error de red o en el servidor. Intenta de nuevo.');
+        console.error("Error en handleCheckout:", error);
+    } finally {
+        // Re-habilitar el botón si el carrito no se vació (ej. si hubo un error y aún hay productos)
+        if (checkoutBtn && loadCart().length > 0) {
+             checkoutBtn.disabled = false;
+        } else if (checkoutBtn) {
+             checkoutBtn.disabled = true; // El carrito está vacío
+        }
+    }
+}
+
 
 /**
  * 🎯 Configura todos los event listeners para los controles del carrito.
@@ -237,15 +281,92 @@ function setupEventListeners(): void {
         clearBtn.addEventListener('click', clearCart);
     }
     
-    // 4. Listener para Finalizar Compra (placeholder)
+    // 4. Listener para Finalizar Compra
     const checkoutBtn = document.getElementById('checkout-btn');
     if (checkoutBtn) {
-        checkoutBtn.addEventListener('click', () => {
-            console.log("🚀 Lógica de Finalizar Compra (Checkout) iría aquí.");
-            // Aquí iría la lógica para procesar el pedido y, probablemente, vaciar el carrito
-        });
+        checkoutBtn.addEventListener('click', handleCheckout);
     }
 }
+
+/**
+ * 🌐 Envía el carrito y la información del usuario al backend.
+ */
+async function sendCart() {
+    // Traer id de usuario
+    const session = localStorage.getItem('sesion');
+    let userId: number | null = null;
+
+    try {
+        if (session) {
+            const sessionData = JSON.parse(session);
+            
+            userId = sessionData.id || sessionData.idUser || sessionData.usuarioId; 
+            
+            // Verificar si el ID obtenido es un número válido
+            if (typeof userId !== 'number' || isNaN(userId) || userId === 0) {
+                console.error(`Error: El ID de usuario no es válido o no se encontró. Valor obtenido: ${userId}`);
+                return { success: false, message: "No se pudo obtener el ID del usuario. Asegúrese de que la clave de ID es 'id' dentro de localStorage['sesion']." };
+            }
+        } else {
+            console.error("Session data ('sesion') not found in localStorage.");
+            return { success: false, message: "User session is missing. Please log in." };
+        }
+    } catch (e) {
+        console.error("Error parsing session data:", e);
+        return { success: false, message: "Invalid session data format." };
+    }
+
+    // 2. Load the cart data
+    let cartData;
+    try {
+        const cartJson = localStorage.getItem('cart');
+        cartData = cartJson ? JSON.parse(cartJson) : [];
+        if (cartData.length === 0) {
+            return { success: false, message: "Cart is empty. Nothing to send." };
+        }
+    } catch (e) {
+        console.error("Error parsing 'cart' data from localStorage:", e);
+        return { success: false, message: "Invalid cart data format." };
+    }
+
+    // 3. Prepare the data for the API (Payload)
+    // Se utiliza 'productoId' y 'cantidad' para coincidir con el DTO de Spring Boot
+    const orderDetailsPayload = cartData.map((item : any)=> ({
+        productoId: item.id,     
+        cantidad: item.cantidad  
+    }));
+
+    const payload = {
+        usuarioId: userId,           // Se envía el ID bajo la clave 'usuarioId'
+        items: orderDetailsPayload 
+    };
+
+    // 4. Perform the network request
+    try {
+        const response = await fetch('http://localhost:8080/pedidos/carrito', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+        
+        // Handle response status (e.g., check for 200-299 success range)
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+        }
+
+        // Assuming the API returns JSON data on success
+        return await response.json();
+
+    } catch (e) {
+        console.error("Error sending cart to the server:", e);
+        // Return a standard error response
+        return { success: false, message: "Failed to send cart to the server." };
+    }
+}
+
 
 // ============================================
 // 🚀 I N I C I A L I Z A C I Ó N
