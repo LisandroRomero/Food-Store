@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Store - Detalle de Producto</title>
+
+    <link rel="stylesheet" href="/src/styles/styles-unified.css">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        /* Page-specific small overrides can live here if needed */
+        .product-detail-card {
+            display: flex;
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 2rem auto;
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+        .pd-image {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+        .product-image {
+            width: 100%;
+            height: auto;
+            border-radius: var(--border-radius-lg);
+            object-fit: cover;
+        }
+        .product-info {
+            flex: 2;
+        }
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .qty-input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            padding: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="navbar-brand">
+            <h1 class="store-name">🍕 Food Store</h1>
+        </div>
+        <div class="navbar-right">
+            <nav class="navbar-links">
+                <a href="/src/pages/client/index.html">Inicio</a>
+                <a href="/src/pages/client/orders/orders.html">Mis Pedidos</a>
+            </nav>
+            <div class="navbar-user">
+                <a href="/src/pages/client/cart/cart.html" class="cart-icon-link">
+                    <span class="cart-icon">🛒 Carrito<sup class="cart-count">0</sup></span>
+                </a>
+                <span id="userInfo" class="user-name">Juan Pérez</span>
+                <div id="logoutContainer" class="logout-btn-container"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="product-detail-section">
+            <div id="product-detail-container" class="product-detail-card">
+                <!-- El contenido se renderiza aquí por productDetail.ts -->
+                <p>Cargando producto...</p>
+            </div>
+        </section>
+        
+        <!-- Contenedor para mensajes de éxito/error del TS -->
+        <div id="message-container" style="text-align: center; margin-top: 1rem;">
+            <!-- Este div es usado por productDetail.ts para mostrar mensajes -->
+            <div id="success-message" class="message success" style="display:none; max-width: 400px; margin: 0 auto;"></div>
+        </div>
+    </main>
+
+    <!-- Importar el script que maneja la lógica del detalle -->
+    <script type="module" src="./productDetail.ts"></script>
+</body>
+</html>

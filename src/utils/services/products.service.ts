@@ -1,4 +1,24 @@
 export const productsService = {
+  // Obtener un producto específico por ID
+  getProductoById: async (id: string) => {
+    try {
+      const response = await fetch(`/api/productos/${id}`);
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Error al obtener el producto');
+      }
+      
+      return { success: true, data };
+    } catch (error) {
+      console.error('Error al obtener el producto:', error);
+      return { 
+        success: false, 
+        message: (error as Error).message || 'Error de conexión' 
+      };
+    }
+  },
+
   // Obtener todos los productos
   getProductos: async () => {
     try {

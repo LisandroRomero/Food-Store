@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Pedidos TS</title>
+    <link rel="stylesheet" href="/src/styles/styles-unified.css">
+    <link rel="stylesheet" href="styles.css"> 
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="navbar-brand">
+            <h1 class="store-name">🍕 Food Store</h1>
+        </div>
+        <div class="navbar-right">
+            <nav class="navbar-links">
+                <a href="/src/pages/client/index.html">Inicio</a>
+                <a href="/src/pages/client/orders/orders.html">Mis Pedidos</a>
+            </nav>
+            <div class="navbar-user">
+                <a href="/src/pages/client/cart/cart.html" class="cart-icon-link">
+                    <span class="cart-icon">🛒 Carrito<sup class="cart-count">0</sup></span>
+                </a>
+                <span id="userInfo" class="user-name"></span>
+                <div id="logoutContainer" class="logout-btn-container"></div>
+            </div>
+        </div>
+    </header>
+
+    <div id="orders-container">
+        <p id="loading">Cargando pedidos...</p>
+    </div>
+
+<script src="index.js" type="module"></script>
+
+</body>
+</html>

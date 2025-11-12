@@ -23,6 +23,7 @@ if (sesion) {
   setupMobileMenu();
 }
 
+
 //mobile
 function setupMobileMenu(): void {
   const toggle = document.getElementById('mobileMenuToggle');
@@ -137,9 +138,9 @@ function mostrarHoraLogin(): void {
 // Define la estructura de tu proyecto para mapear el data-page a la URL del archivo
 const pageMap: { [key: string]: string } = {
     adminHome: 'dashboard', 
-    categories: '../categories/categories-content.html', 
-    products: '../products/products-content.html',       
-    orders: '../orders/orders-content.html',
+    categories: '../categories/categories.html', 
+    products: '../products/products.html',       
+    orders: '../orders/orders.html',
 };
 
 const contentArea = document.getElementById('main-content-wrapper') as HTMLElement | null;
@@ -353,3 +354,9 @@ function handleSidebarClick(event: MouseEvent): void {
 
 // Escuchar clicks en el sidebar
 sidebarNav?.addEventListener('click', handleSidebarClick);
+
+// Mostrar el dashboard por defecto solo después de que todas las referencias DOM estén inicializadas
+if (sesion) {
+    // loadContent comprobará contentArea internamente
+    loadContent('adminHome');
+}

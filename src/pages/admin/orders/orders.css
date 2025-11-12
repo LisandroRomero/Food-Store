@@ -1,0 +1,65 @@
+.order-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.order-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.order-card__info h3 {
+    margin: 0;
+    font-size: 1em;
+    font-weight: 600;
+    color: #333;
+}
+
+.order-card__info p {
+    margin: 0;
+    font-size: 0.85em;
+    color: #666;
+    line-height: 1.5;
+}
+
+.order-card__status {
+    background-color: #ffe0b2;
+    color: #e65100;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-self: flex-start;
+}
+
+.order-card__separator {
+    border: 0;
+    height: 1px;
+    background-color: #6e6b6b;
+    margin: 15px 0;
+}
+
+.order-card__summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1em;
+}
+
+.order-card__item-count {
+    color: #333;
+}
+
+.order-card__total-price {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #e65100;
+}

@@ -127,10 +127,10 @@ function renderizarTablaCategorias(categoriasAMostrar: ICategoria[]): void {
             <td class="text-center">${categoria.id}</td>
             <td>
                 <img src="${categoria.imagen}" 
-                     alt="${categoria.nombre}" 
-                     class="category-img"
-                     onerror="this.src='https://via.placeholder.com/60x60/667eea/ffffff?text=CAT'"
-                     loading="lazy">
+                    alt="${categoria.nombre}" 
+                    class="category-img"
+                    onerror="this.src='https://via.placeholder.com/60x60/667eea/ffffff?text=CAT'"
+                    loading="lazy">
             </td>
             <td><strong>${categoria.nombre}</strong></td>
             <td>${categoria.descripcion}</td>

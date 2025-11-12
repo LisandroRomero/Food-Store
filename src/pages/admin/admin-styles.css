@@ -40,19 +40,16 @@
 }
 
 /* Colores distintivos MINIMALISTAS por módulo */
-/* PRODUCTOS - Azul muy sutil */
 .module-header.products-module::before {
     background: #5dade2;
     opacity: 0.4;
 }
 
-/* CATEGORÍAS - Verde muy sutil */
 .module-header.categories-module::before {
     background: #52be80;
     opacity: 0.4;
 }
 
-/* ÓRDENES - Naranja muy sutil */
 .module-header.orders-module::before {
     background: #f8b739;
     opacity: 0.4;
@@ -133,12 +130,10 @@
     border-spacing: 0;
 }
 
-/* Header de tabla */
 .modern-table thead tr {
     background: #2c3e50;
 }
 
-/* NO gradientes llamativos */
 .products-module .modern-table thead tr {
     border-top: 2px solid #5dade2;
 }
@@ -312,37 +307,17 @@
     border-top: 1px solid #e0e0e0;
 }
 
-.btn-cancel,
-.btn-save {
-    padding: 0.625rem 1.25rem;
-    border: none;
-    border-radius: 6px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 0.875rem;
-}
-
+/* Botones de modal utilizando clases base */
 .btn-cancel {
-    background: #95a5a6;
+    background: var(--color-gray-500);
     color: white;
 }
 
 .btn-cancel:hover {
-    background: #7f8c8d;
+    background: var(--color-gray-600);
 }
 
-.btn-save {
-    background: #3498db;
-    color: white;
-}
-
-.btn-save:hover {
-    background: #2980b9;
-    transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(52, 152, 219, 0.3);
-}
-
+/* Los botones save/edit/delete mantienen sus estilos específicos para el panel admin */
 .btn-save:disabled {
     opacity: 0.6;
     cursor: not-allowed;
@@ -350,33 +325,7 @@
 }
 
 /* FORMULARIOS */
-.form-group {
-    margin-bottom: 1.25rem;
-}
-
-.form-label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #2c3e50;
-    font-size: 0.875rem;
-}
-
-.form-control {
-    width: 100%;
-    padding: 0.625rem 0.875rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 0.875rem;
-    transition: all 0.2s ease;
-    font-family: inherit;
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-}
+/* Se utilizan las clases base de form-group, form-label, form-control de styles-unified.css */
 
 .form-hint {
     display: block;
@@ -393,19 +342,6 @@
 
 .form-check-group {
     margin-top: 0.5rem;
-}
-
-.form-check {
-    display: flex;
-    align-items: center;
-    gap: 0.625rem;
-    cursor: pointer;
-}
-
-.form-check input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
 }
 
 /* BADGES Y ESTADOS */
@@ -432,30 +368,22 @@
 /* LOADING Y EMPTY STATES */
 .empty-message {
     text-align: center;
-    padding: 2.5rem 1.5rem;
-    color: #7f8c8d;
+    padding: var(--spacing-2xl) var(--spacing-lg);
+    color: var(--color-gray-600);
 }
 
 .empty-message p {
-    margin: 0.5rem 0;
-    font-size: 1rem;
-    font-weight: 500;
+    margin: var(--spacing-xs) 0;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
 }
 
 .empty-message small {
-    color: #95a5a6;
-    font-size: 0.813rem;
+    color: var(--color-gray-500);
+    font-size: var(--font-size-sm);
 }
 
-.loading-spinner {
-    width: 36px;
-    height: 36px;
-    margin: 0 auto 1rem;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
+/* Se utiliza el spinner base de styles-unified.css */
 
 @keyframes spin {
     to { transform: rotate(360deg); }
@@ -547,4 +475,29 @@
     .modern-table tbody td {
         padding: 0.675rem 0.5rem;
     }
+}
+
+
+/* ------------------ PRODUCT / CATEGORY SPECIFIC ------------------ */
+/* Image product */
+.product-img,
+.category-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    transition: transform 0.2s ease;
+}
+
+.product-img:hover,
+.category-img:hover {
+    transform: scale(1.1);
+}
+
+/* Precio destacado (productos) */
+.product-price {
+    font-weight: 700;
+    color: #28a745;
+    font-size: 1.1rem;
 }
