@@ -1,9 +1,4 @@
-/* Admin unified styles
-   Merge of shared-admin.css + product/category specific rules
-   Keep this file as the global admin stylesheet. Child pages should NOT import shared-admin.css directly.
-*/
 
-/* ------------------ SHARED ADMIN (from shared-admin.css) ------------------ */
 /* CONTENEDOR PRINCIPAL */
 .module-container {
     padding: 1.5rem;
@@ -506,5 +501,3 @@
     color: #28a745;
     font-size: 1.1rem;
 }
-
-/* End admin-styles.css */

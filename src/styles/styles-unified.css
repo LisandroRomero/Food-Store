@@ -561,7 +561,6 @@ li {
    ========================= */
 .header {
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-  color: var(--color-white);
   padding: var(--spacing-lg);
   box-shadow: var(--shadow);
 }

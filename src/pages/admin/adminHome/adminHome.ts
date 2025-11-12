@@ -138,9 +138,9 @@ function mostrarHoraLogin(): void {
 // Define la estructura de tu proyecto para mapear el data-page a la URL del archivo
 const pageMap: { [key: string]: string } = {
     adminHome: 'dashboard', 
-    categories: '../categories/categories-content.html', 
-    products: '../products/products-content.html',       
-    orders: '../orders/orders-content.html',
+    categories: '../categories/categories.html', 
+    products: '../products/products.html',       
+    orders: '../orders/orders.html',
 };
 
 const contentArea = document.getElementById('main-content-wrapper') as HTMLElement | null;
