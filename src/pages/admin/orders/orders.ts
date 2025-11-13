@@ -7,13 +7,11 @@ import type { IPedido } from '../../../types/IOrders';
 let pedidos: IPedido[] = [];
 let filtroEstado: string = '';
 
+/**
+ * Inicializa el módulo de pedidos: configura eventos y carga los datos
+ */
 export async function init(): Promise<void> {
-    console.log('📦 Inicializando módulo de pedidos...');
-    
-    // Configurar event listeners
     setupEventListeners();
-    
-    // Cargar datos iniciales
     await cargarPedidos();
 }
 
@@ -52,12 +50,15 @@ function handleOrderActions(e: Event): void {
     }
 }
 
-// Cargar pedidos desde la API
+/**
+ * Carga todos los pedidos desde la API y los renderiza
+ */
 async function cargarPedidos(): Promise<void> {
     try {
         const response = await ordersService.obtenerTodosPedidos();
+        
         if (response.success) {
-            pedidos = response.data;
+            pedidos = Array.isArray(response.data) ? response.data : [];
             renderizarPedidos();
         } else {
             mostrarError(response.message || 'Error al cargar pedidos');
@@ -68,7 +69,9 @@ async function cargarPedidos(): Promise<void> {
     }
 }
 
-// Renderizar pedidos filtrados
+/**
+ * Renderiza los pedidos aplicando el filtro de estado seleccionado
+ */
 function renderizarPedidos(): void {
     const container = document.getElementById('ordersContainer');
     if (!container) return;
@@ -92,7 +95,9 @@ function renderizarPedidos(): void {
     container.innerHTML = pedidosFiltrados.map(pedido => crearTarjetaPedido(pedido)).join('');
 }
 
-// Crear tarjeta HTML para un pedido
+/**
+ * Genera el HTML de una tarjeta de pedido con toda su información
+ */
 function crearTarjetaPedido(pedido: IPedido): string {
     const statusStyles = obtenerEstiloEstado(pedido.estado);
     const fechaFormateada = formatearFecha(pedido.fecha);
@@ -131,23 +136,24 @@ function crearTarjetaPedido(pedido: IPedido): string {
 }
 
 // Generar botones de cambio de estado según el estado actual
+// Estados válidos según backend: PENDIENTE, CONFIRMADO, CANCELADO, TERMINADO
 function generarBotonesEstado(pedidoId: number, estadoActual: string): string {
     const estadoUpper = estadoActual.toUpperCase();
     const botones: string[] = [];
     
     if (estadoUpper === 'PENDIENTE') {
         botones.push(`
-            <button class="btn-change-status" data-pedido-id="${pedidoId}" data-nuevo-estado="EN CAMINO">
-                Marcar como En Camino
+            <button class="btn-change-status" data-pedido-id="${pedidoId}" data-nuevo-estado="CONFIRMADO">
+                Confirmar Pedido
             </button>
             <button class="btn-change-status btn-cancel" data-pedido-id="${pedidoId}" data-nuevo-estado="CANCELADO">
                 Cancelar
             </button>
         `);
-    } else if (estadoUpper === 'EN CAMINO') {
+    } else if (estadoUpper === 'CONFIRMADO') {
         botones.push(`
-            <button class="btn-change-status" data-pedido-id="${pedidoId}" data-nuevo-estado="COMPLETADO">
-                Marcar como Completado
+            <button class="btn-change-status" data-pedido-id="${pedidoId}" data-nuevo-estado="TERMINADO">
+                Marcar como Terminado
             </button>
         `);
     }
@@ -155,7 +161,9 @@ function generarBotonesEstado(pedidoId: number, estadoActual: string): string {
     return botones.length > 0 ? `<div class="order-actions">${botones.join('')}</div>` : '';
 }
 
-// Cambiar estado de un pedido
+/**
+ * Actualiza el estado de un pedido mediante la API
+ */
 async function cambiarEstadoPedido(pedidoId: number, nuevoEstado: string): Promise<void> {
     const confirmacion = confirm(`¿Cambiar el estado del pedido #ORD-${pedidoId} a "${nuevoEstado}"?`);
     if (!confirmacion) return;
@@ -174,7 +182,13 @@ async function cambiarEstadoPedido(pedidoId: number, nuevoEstado: string): Promi
     }
 }
 
+// ============================================
 // Funciones de utilidad
+// ============================================
+
+/**
+ * Formatea un array de fecha [año, mes, día] a string legible
+ */
 function formatearFecha(dateArray: IPedido['fecha']): string {
     const [year, month, day] = dateArray;
     const date = new Date(year, month - 1, day);
@@ -190,6 +204,9 @@ function formatearFecha(dateArray: IPedido['fecha']): string {
     return `${date.toLocaleDateString('es-ES', options)}, ${hours}:${minutes < 10 ? '0' + minutes : minutes}`;
 }
 
+/**
+ * Formatea un número a formato de moneda argentina (ARS)
+ */
 function formatearMoneda(amount: number): string {
     return new Intl.NumberFormat('es-AR', {
         style: 'currency',
@@ -198,18 +215,21 @@ function formatearMoneda(amount: number): string {
     }).format(amount);
 }
 
+/**
+ * Retorna los colores de fondo y texto según el estado del pedido
+ */
 function obtenerEstiloEstado(status: string): { background: string; color: string } {
     switch(status.toUpperCase()) {
         case 'PENDIENTE':
-            return { background: '#ffe0b2', color: '#d68910' };
-        case 'COMPLETADO':
-            return { background: '#d4edda', color: '#155724' };
+            return { background: '#ffe0b2', color: '#d68910' }; // Amarillo/Naranja
+        case 'CONFIRMADO':
+            return { background: '#cce5ff', color: '#004085' }; // Azul
+        case 'TERMINADO':
+            return { background: '#d4edda', color: '#155724' }; // Verde
         case 'CANCELADO':
-            return { background: '#f8d7da', color: '#721c24' };
-        case 'EN CAMINO':
-            return { background: '#cce5ff', color: '#004085' };
+            return { background: '#f8d7da', color: '#721c24' }; // Rojo
         default:
-            return { background: '#e9ecef', color: '#495057' };
+            return { background: '#e9ecef', color: '#495057' }; // Gris
     }
 }
 
