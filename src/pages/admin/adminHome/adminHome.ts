@@ -197,8 +197,7 @@ async function loadContent(pageKey: string): Promise<void> {
             } else if (pageKey === 'products') {
                 module = await import('../products/products.js');
             } else if (pageKey === 'orders') {
-                console.log('Módulo de pedidos aún no está implementado');
-                return;
+                module = await import('../orders/orders.js');
             }
             
             if (module && module.init) {

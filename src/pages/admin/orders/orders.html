@@ -1,21 +1,33 @@
-<!-- MOCKUP DE ORDEN -->
-
-<div class="order-card">
-    <div class="order-card__header">
-        <div class="order-card__info">
-            <h3 class="order-card__title">Pedido #ORD-1760797178248</h3>
-            <p class="order-card__detail">Cliente: **Juan Pérez**</p>
-            <p class="order-card__detail">18 de octubre de 2025, 11:10 a. m.</p>
+<!-- CONTENIDO DE PEDIDOS -->
+<div class="module-container">
+    <div class="module-card">
+        <!-- Header -->
+        <div class="module-header orders-module">
+            <div>
+                <h1 class="module-title">📦 Gestión de Pedidos</h1>
+                <p class="module-subtitle">Administra y gestiona los pedidos de tu tienda</p>
+            </div>
         </div>
-        <div class="order-card__status">
-            PENDIENTE
+        
+        <!-- Filtros -->
+        <div class="filters-section">
+            <div class="filter-group">
+                <label for="filterEstado" class="filter-label">Filtrar por estado:</label>
+                <select id="filterEstado" class="filter-select">
+                    <option value="">Todos los estados</option>
+                    <option value="PENDIENTE">Pendiente</option>
+                    <option value="CONFIRMADO">Confirmado</option>
+                    <option value="TERMINADO">Terminado</option>
+                    <option value="CANCELADO">Cancelado</option>
+                </select>
+            </div>
         </div>
-    </div>
-    
-    <hr class="order-card__separator">
-
-    <div class="order-card__summary">
-        <span class="order-card__item-count">1 producto(s)</span>
-        <span class="order-card__total-price">$25500.00</span>
+        
+        <!-- Contenedor de pedidos -->
+        <div id="ordersContainer" class="orders-grid">
+            <div class="loading-message">
+                <p>Cargando pedidos...</p>
+            </div>
+        </div>
     </div>
 </div>
